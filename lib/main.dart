@@ -27,12 +27,29 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // Define un MaterialColor personalizado
+  static const MaterialColor customSwatch = MaterialColor(
+    0xFFBF2828, // Valor principal (el color que deseas)
+    <int, Color>{
+      50: Color(0xFFFFEDED),
+      100: Color(0xFFFFCBCB),
+      200: Color(0xFFFFA8A8),
+      300: Color(0xFFFF8585),
+      400: Color(0xFFFF6F6F),
+      500: Color(0xFFBF2828), // Valor principal
+      600: Color(0xFFA82323),
+      700: Color(0xFF931E1E),
+      800: Color(0xFF7A1919),
+      900: Color(0xFF5E1414),
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mi Aplicación',
+      title: 'Mood Match',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: customSwatch, // Usa el MaterialColor personalizado
       ),
       initialRoute: '/index', // Establece la ruta inicial en '/index'
       routes: routes, // Utiliza las rutas definidas en routes.dart
