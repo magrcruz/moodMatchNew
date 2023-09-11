@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:mood_match/widgets/custom_app_bar.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bienvenido a la Aplicación'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
       body: Center(
         child: Column(
