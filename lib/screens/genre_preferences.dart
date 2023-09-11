@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_match/widgets/genre_title.dart';
 
 class GenrePreferences extends StatefulWidget {
   @override
@@ -81,8 +82,10 @@ class _GenrePreferencesState extends State<GenrePreferences> {
               itemCount: allGenres.length,
               itemBuilder: (context, index) {
                 final genre = allGenres[index];
+                final type = "music";
                 return GenreTile(
                   genre: genre,
+                  type: type,
                   isSelected: selectedGenres.contains(genre),
                   onSelected: (isSelected) => toggleGenreSelection(genre),
                 );
@@ -142,77 +145,5 @@ class _GenrePreferencesState extends State<GenrePreferences> {
         selectedGenres.add(genre);
       }
     });
-  }
-}
-
-class GenreTile extends StatelessWidget {
-  final String genre;
-  final bool isSelected;
-  final void Function(bool)? onSelected;
-
-  GenreTile({
-    required this.genre,
-    required this.isSelected,
-    required this.onSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final imagePath = 'assets/images/defaultMovie.png';
-    return InkWell(
-      onTap: () {
-        if (onSelected != null) {
-          onSelected!(!isSelected);
-        }
-      },
-      child: Card(
-        elevation: 4.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de la tarjeta según tus necesidades.
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: isSelected
-                ? LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFF9BD5C9), Color(0xFF86A8E7)],
-                  )
-                : null,
-            borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de la tarjeta según tus necesidades.
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de las esquinas de la imagen.
-                child: Image.asset(
-                  imagePath,
-                  width: 80, // Ajusta el tamaño de la imagen según tus necesidades.
-                  height: 80,
-                  errorBuilder: (context, error, stackTrace) {
-                    // En caso de error al cargar la imagen, muestra la imagen por defecto.
-                    return Image.asset(
-                      'assets/images/defaultMovie.png',
-                      width: 80,
-                      height: 80,
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 5), // Espacio entre la imagen y el texto
-              Text(
-                genre,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  fontFamily: 'system-ui', // Cambia la fuente a system ui
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 class GenreTile extends StatelessWidget {
   final String genre;
+  final String type;
   final bool isSelected;
   final void Function(bool)? onSelected;
 
   GenreTile({
     required this.genre,
+    required this.type,
     required this.isSelected,
     required this.onSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    String imagePath = 'assets/imagen_${genre.toLowerCase()}.png';
-
+    final imagePath = 'assets/images/defaultMovie.png';
     return InkWell(
       onTap: () {
         if (onSelected != null) {
@@ -22,19 +23,51 @@ class GenreTile extends StatelessWidget {
         }
       },
       child: Card(
-        color: isSelected ? Colors.blue : Colors.white,
         elevation: 4.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              imagePath ?? 'assets/images/defaultMovie.jpg',
-              width: 80.0,
-              height: 80.0,
-            ),
-            SizedBox(height: 8.0),
-            Text(genre),
-          ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de la tarjeta según tus necesidades.
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF9BD5C9), Color(0xFF86A8E7)],
+                  )
+                : null,
+            borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de la tarjeta según tus necesidades.
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de las esquinas de la imagen.
+                child: Image.asset(
+                  imagePath,
+                  width: 80, // Ajusta el tamaño de la imagen según tus necesidades.
+                  height: 80,
+                  errorBuilder: (context, error, stackTrace) {
+                    // En caso de error al cargar la imagen, muestra la imagen por defecto.
+                    return Image.asset(
+                      'assets/images/defaultMovie.png',
+                      width: 80,
+                      height: 80,
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 5), // Espacio entre la imagen y el texto
+              Text(
+                genre,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  fontFamily: 'system-ui', // Cambia la fuente a system ui
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

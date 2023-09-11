@@ -19,15 +19,27 @@ class Index extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/choose_emotion/default');
+                Navigator.pushNamed(context, '/login');
               },
-              child: Text('Ir a ChooseEmotion DOESNT WORK'),
+              child: Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/signup');
+              },
+              child: Text('SignUp'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/choose_emotion');
+              },
+              child: Text('Ir a ChooseEmotion'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/recommendation_results/default/default');
               },
-              child: Text('Ir a RecommendationResults DOESNT WORK'),
+              child: Text('Ir a RecommendationResults'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -47,12 +59,7 @@ class Index extends StatelessWidget {
               },
               child: Text('Ir a ShowInfo'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/working');
-              },
-              child: Text('Ir a Working'),
-            ),
+            
           ],
         ),
       ),
