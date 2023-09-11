@@ -5,7 +5,7 @@ class Index extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Página Principal'),
+        title: Text('Menú'),
       ),
       body: Center(
         child: Column(
