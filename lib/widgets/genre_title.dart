@@ -33,7 +33,7 @@ class GenreTile extends StatelessWidget {
                 ? LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF9BD5C9), Color(0xFF86A8E7)],
+                    colors: [Color(0xFFFFEDED), Color(0xFFBF2828)],
                   )
                 : null,
             borderRadius: BorderRadius.circular(12.0), // Ajusta el radio de la tarjeta según tus necesidades.

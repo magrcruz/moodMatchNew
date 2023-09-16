@@ -65,14 +65,13 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
     );
   }
 
-  final List<String> emotions = ['Feliz', 'Triste', 'Enojado', 'Asustado', 'Emocionado'];
+  final List<String> emotions = ['Feliz', 'Triste', 'Enojado', 'Asustado'];
 
   final Map<String, IconData> emotionIcons = {
-    'Feliz': Icons.sentiment_satisfied,
+    'Feliz': Icons.sentiment_very_satisfied,
     'Triste': Icons.sentiment_very_dissatisfied,
     'Enojado': Icons.mood_bad, // Usando Icons.mood_bad en lugar de sentiment_very_angry
     'Asustado': Icons.sentiment_dissatisfied,
-    'Emocionado': Icons.mood,
   };
 
 }
