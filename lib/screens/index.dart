@@ -59,7 +59,12 @@ class Index extends StatelessWidget {
               },
               child: Text('Ir a ShowInfo'),
             ),
-            
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/user_info');
+              },
+              child: Text('Ir a UserInfo'),
+            ),
           ],
         ),
       ),
