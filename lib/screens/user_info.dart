@@ -23,21 +23,21 @@ class UserProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white, // Establece el fondo en blanco
-      padding: EdgeInsets.all(20), // Añade un espaciado interior
+      padding: const EdgeInsets.all(20), // Añade un espaciado interior
       child: Column(
         children: [
           // Imagen de perfil del usuario
-          CircleAvatar(
+          const CircleAvatar(
             radius: 60,
             backgroundImage: AssetImage('assets/images/logo.png'),
           ),
 
-          SizedBox(height: 20), // Espaciado entre la imagen de perfil y el nombre/apodo
+          const SizedBox(height: 20), // Espaciado entre la imagen de perfil y el nombre/apodo
 
           // Nombre y apodo
           Text(
             userInfo.name,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               decoration: TextDecoration.none, // Elimina el subrayado
@@ -45,18 +45,18 @@ class UserProfileWidget extends StatelessWidget {
           ),
           Text(
             userInfo.nickname,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.grey,
               decoration: TextDecoration.none, // Elimina el subrayado
             ),
           ),
 
-          SizedBox(height: 20), // Espaciado entre el nombre/apodo y el estado de la cuenta premium
+          const SizedBox(height: 20), // Espaciado entre el nombre/apodo y el estado de la cuenta premium
 
           // Estado de la cuenta premium y botón correspondiente
           if (userInfo.isPremium)
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
@@ -83,7 +83,7 @@ class UserProfileWidget extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 primary: Colors.amber,
               ),
-              child: Text(
+              child: const Text(
                 "Obtener Premium",
                 style: TextStyle(
                   fontSize: 16,

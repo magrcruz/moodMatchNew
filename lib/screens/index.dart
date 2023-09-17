@@ -5,7 +5,7 @@ class Index extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú'),
+        title: const Text('Menú'),
       ),
       body: Center(
         child: Column(
@@ -15,55 +15,55 @@ class Index extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/');
               },
-              child: Text('Ir a Home'),
+              child: const Text('Ir a Home'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/login');
               },
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/signup');
               },
-              child: Text('SignUp'),
+              child: const Text('SignUp'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/choose_emotion');
               },
-              child: Text('Ir a ChooseEmotion'),
+              child: const Text('Ir a ChooseEmotion'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/recommendation_results/default/default');
               },
-              child: Text('Ir a RecommendationResults'),
+              child: const Text('Ir a RecommendationResults'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/choose_content');
               },
-              child: Text('Ir a ChooseContent'),
+              child: const Text('Ir a ChooseContent'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/genre_preferences');
               },
-              child: Text('Ir a GenrePreferences'),
+              child: const Text('Ir a GenrePreferences'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/show_info');
               },
-              child: Text('Ir a ShowInfo'),
+              child: const Text('Ir a ShowInfo'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/user_info');
               },
-              child: Text('Ir a UserInfo'),
+              child: const Text('Ir a UserInfo'),
             ),
           ],
         ),

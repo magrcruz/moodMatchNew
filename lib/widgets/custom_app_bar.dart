@@ -26,8 +26,8 @@ class CustomAppBar extends StatelessWidget {
             'assets/images/logo.png',
             height: 50,
           ),
-          SizedBox(width: 8),
-          Text(
+          const SizedBox(width: 8),
+          const Text(
             'MOOD MATCH',
             style: TextStyle(
               fontSize: 20,
@@ -38,7 +38,7 @@ class CustomAppBar extends StatelessWidget {
       backgroundColor: customSwatch,
       actions: [
         IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
             print("Presionaste el botón de ajustes"); // Agrega este registro
             Navigator.pushNamed(context, '/index'); // Navega a la ruta '/index'

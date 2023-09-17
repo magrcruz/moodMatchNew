@@ -10,7 +10,7 @@ class RecommendationResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resultados de la Recomendación'),
+        title: const Text('Resultados de la Recomendación'),
       ),
       body: Center(
         child: Column(
@@ -18,11 +18,11 @@ class RecommendationResults extends StatelessWidget {
           children: <Widget>[
             Text(
               'Tipo seleccionado: $type',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             Text(
               'Emoción seleccionada: $emotion',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             // Aquí puedes agregar más widgets y lógica para la pantalla de resultados de recomendación
           ],

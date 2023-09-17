@@ -12,7 +12,7 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Selecciona Emoción'),
+        title: const Text('Selecciona Emoción'),
       ),
       body: ListView(
         children: emotions.map((emotion) {
@@ -45,14 +45,14 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Error'),
-                  content: Text('Por favor, selecciona una emoción.'),
+                  title: const Text('Error'),
+                  content: const Text('Por favor, selecciona una emoción.'),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cerrar'),
+                      child: const Text('Cerrar'),
                     ),
                   ],
                 );
@@ -60,7 +60,7 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
             );
           }
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

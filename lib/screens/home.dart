@@ -14,63 +14,63 @@ class HomeScreen extends StatelessWidget {
     String lastRecommendation = "The Big Bang Theory";
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: CustomAppBar(),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CircleAvatar(
+            const CircleAvatar(
               backgroundImage: AssetImage('assets/images/logo.png'),//NetworkImage(currentUser.profileImageURL),
               radius: 100,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               currentUser.username,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Recomendaciones Hechas:',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       '$numberOfRecommendations',
-                      style: TextStyle(fontSize: 20, color: Colors.blue),
+                      style: const TextStyle(fontSize: 20, color: Colors.blue),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Última Recomendación:',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       '$lastRecommendation',
-                      style: TextStyle(fontSize: 20, color: Colors.blue),
+                      style: const TextStyle(fontSize: 20, color: Colors.blue),
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/index');
               },
-              child: Text(
+              child: const Text(
                 'Comencemos',
                 style: TextStyle(fontSize: 18),
               ),

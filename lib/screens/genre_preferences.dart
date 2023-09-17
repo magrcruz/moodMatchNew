@@ -28,11 +28,11 @@ class _GenrePreferencesState extends State<GenrePreferences> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preferencias'),
+        title: const Text('Preferencias'),
       ),
       body: Column(
         children: <Widget>[
-          ListTile(
+          const ListTile(
             title: Text(
               'Selecciona los géneros de tu preferencia',
               style: TextStyle(
@@ -50,7 +50,7 @@ class _GenrePreferencesState extends State<GenrePreferences> {
                 labelText: 'Buscar género',
                 hintText: 'Escribe aquí...',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.clear), // Icono para borrar el texto
+                  icon: const Icon(Icons.clear), // Icono para borrar el texto
                   onPressed: () {
                     searchController.clear(); // Borra el texto de búsqueda
                     // Restablece la lista de géneros a su estado original
@@ -75,7 +75,7 @@ class _GenrePreferencesState extends State<GenrePreferences> {
           ),
           Expanded(
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, // Tres columnas
                 childAspectRatio: 1.0, // Asegura que los elementos sean cuadrados
               ),
@@ -106,7 +106,7 @@ class _GenrePreferencesState extends State<GenrePreferences> {
                       content: Text(selectedGenres.join(', ')),
                       actions: [
                         TextButton(
-                          child: Text('Cerrar'),
+                          child: const Text('Cerrar'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },

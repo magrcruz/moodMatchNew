@@ -5,7 +5,7 @@ class ChooseContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Selecciona el Contenido'),
+        title: const Text('Selecciona el Contenido'),
       ),
       body: ListView(
         children: <Widget>[

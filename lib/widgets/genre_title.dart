@@ -30,7 +30,7 @@ class GenreTile extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: isSelected
-                ? LinearGradient(
+                ? const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [Color(0xFFFFEDED), Color(0xFFBF2828)],
@@ -57,10 +57,10 @@ class GenreTile extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 5), // Espacio entre la imagen y el texto
+              const SizedBox(height: 5), // Espacio entre la imagen y el texto
               Text(
                 genre,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                   fontFamily: 'system-ui', // Cambia la fuente a system ui
