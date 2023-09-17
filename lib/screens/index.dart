@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Index extends StatelessWidget {
+class Index extends StatefulWidget {
+  @override
+  _IndexState createState() => _IndexState();
+}
+
+class _IndexState extends State<Index> {
+  List<DocumentSnapshot> documentList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +73,39 @@ class Index extends StatelessWidget {
                 Navigator.pushNamed(context, '/user_info');
               },
               child: const Text('Ir a UserInfo'),
+            ),
+            ElevatedButton(
+              child: const Text('Texto del botón'),
+              onPressed: () async {
+                await FirebaseFirestore.instance
+                    .collection('mi-colección')
+                    .doc()
+                    .set({
+                  'name': 'taichi',
+                  'age': 23,
+                  'sex': 'male',
+                  'type': ['A', 'B']
+                });
+                setState(() {}); // Actualiza el estado
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Texto del botón'),
+              onPressed: () async {
+                final snapshot = await FirebaseFirestore.instance
+                    .collection('mi-colección')
+                    .get();
+                setState(() {
+                  documentList = snapshot.docs;
+                });
+              },
+            ),
+            Column(
+              children: documentList.map((document) {
+                return ListTile(
+                  title: Text('Nombre: ${document['name']}'),
+                );
+              }).toList(),
             ),
           ],
         ),
