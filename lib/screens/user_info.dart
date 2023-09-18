@@ -1,99 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:mood_match/controllers/user_info.dart';
+import 'package:mood_match/models/user_profile.dart';
 
-class UserInfo {
-  final String name;
-  final String nickname;
-  final bool isPremium;
-  final String profileImage;
+class UserProfileScreen extends StatefulWidget {
+  final String userEmail; // Correo electrónico del usuario
 
-  UserInfo({
-    required this.name,
-    required this.nickname,
-    required this.isPremium,
-    required this.profileImage,
-  });
+  UserProfileScreen({required this.userEmail});
+
+  @override
+  _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
-class UserProfileWidget extends StatelessWidget {
-  final UserInfo userInfo;
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  late UserProfile _userInfo; // Variable para almacenar la información del usuario
 
-  UserProfileWidget({required this.userInfo});
+  @override
+  void initState() {
+    super.initState();
+    // Cuando se carga la pantalla, llama a la función para obtener la información del usuario
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    try {
+      final UserInfoController userInfoController = UserInfoController();
+      final UserProfile? userInfo = await userInfoController.getUserProfileByEmail(widget.userEmail);
+
+      if (userInfo != null) {
+        // Actualiza el estado con la información del usuario obtenida
+        setState(() {
+          _userInfo = userInfo;
+        });
+      } else {
+        // Maneja el caso en el que el usuario no exista en la base de datos
+        print('El usuario no existe en la base de datos.');
+      }
+    } catch (e) {
+      // Manejar cualquier error que ocurra al obtener la información del usuario
+      print('Error al cargar la información del usuario: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white, // Establece el fondo en blanco
-      padding: const EdgeInsets.all(20), // Añade un espaciado interior
-      child: Column(
-        children: [
-          // Imagen de perfil del usuario
-          const CircleAvatar(
-            radius: 60,
-            backgroundImage: AssetImage('assets/images/logo.png'),
-          ),
-
-          const SizedBox(height: 20), // Espaciado entre la imagen de perfil y el nombre/apodo
-
-          // Nombre y apodo
-          Text(
-            userInfo.name,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.none, // Elimina el subrayado
-            ),
-          ),
-          Text(
-            userInfo.nickname,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
-              decoration: TextDecoration.none, // Elimina el subrayado
-            ),
-          ),
-
-          const SizedBox(height: 20), // Espaciado entre el nombre/apodo y el estado de la cuenta premium
-
-          // Estado de la cuenta premium y botón correspondiente
-          if (userInfo.isPremium)
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                  size: 32,
-                ),
-                SizedBox(width: 10),
-                Text(
-                  "Cuenta Premium",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.amber,
-                    decoration: TextDecoration.none, // Elimina el subrayado
-                  ),
-                ),
-              ],
-            )
-          else
-            ElevatedButton(
-              onPressed: () {
-                // Implementa aquí la lógica para obtener una cuenta premium
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.amber,
-              ),
-              child: const Text(
-                "Obtener Premium",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none, // Elimina el subrayado
-                ),
-              ),
-            ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perfil de Usuario'),
       ),
+      backgroundColor: Colors.white, // Establece un fondo blanco para el Scaffold
+      body: _userInfo != null // Verifica si la información del usuario está disponible
+          ? UserProfileWidget(userInfo: _userInfo) // Muestra UserProfileWidget con la información
+          : Center(child: CircularProgressIndicator()), // Muestra un indicador de carga si aún no se ha cargado la información
     );
   }
 }

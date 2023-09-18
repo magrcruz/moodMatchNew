@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_match/controllers/signup.dart';
 
 class SignUp extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
@@ -7,6 +8,8 @@ class SignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+
+  final SignUpController _signUpController = SignUpController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,24 +68,58 @@ class SignUp extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
-                  // Aquí puedes implementar la lógica para registrar al usuario.
+                onPressed: () async {
                   String firstName = firstNameController.text;
                   String lastName = lastNameController.text;
                   String username = usernameController.text;
                   String email = emailController.text;
                   String password = passwordController.text;
                   String confirmPassword = confirmPasswordController.text;
-                  
+
                   // Validar que las contraseñas coincidan antes de registrar al usuario.
                   if (password == confirmPassword) {
-                    // Realizar el registro del usuario aquí.
-                    print('Nombres: $firstName');
-                    print('Apellidos: $lastName');
-                    print('Usuario: $username');
-                    print('Correo Electrónico: $email');
-                    print('Contraseña: $password');
-                    // Puedes continuar con el proceso de registro.
+                    // Realizar el registro del usuario utilizando el controlador SignUpController.
+                    bool registrationSuccess = await _signUpController.signUp(email, password, firstName, lastName, username);
+
+                    if (registrationSuccess) {
+                      // Registro exitoso, puedes manejar la navegación o mostrar un mensaje de éxito.
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Registro Exitoso'),
+                            content: const Text('El usuario ha sido registrado correctamente.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cerrar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      // Registro fallido, muestra un mensaje de error.
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Error'),
+                            content: const Text('Hubo un problema al registrar el usuario.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cerrar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   } else {
                     // Las contraseñas no coinciden, muestra un mensaje de error.
                     showDialog(

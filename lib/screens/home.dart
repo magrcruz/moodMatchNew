@@ -7,7 +7,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     UserProfile currentUser = UserProfile(
       username: 'Pantalon para tiendas',
-      profileImageURL: '',//Dejo de funcionar, se vencio el link
+      profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
+      isPremium: true,
+      name: 'namesito'
     );
 
     int numberOfRecommendations = 10;

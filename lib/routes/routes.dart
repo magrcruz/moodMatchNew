@@ -11,11 +11,11 @@ import 'package:mood_match/screens/login.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
 
-UserInfo dummyUser = UserInfo(
+UserProfile dummyUser = UserProfile(
       name: "John Doe",
-      nickname: "johndoe123",
+      username: "johndoe123",
       isPremium: true, // Cambia a false si el usuario no es premium
-      profileImage:
+      profileImageURL: ''
           "https://example.com/profile-image.jpg", // URL de la imagen de perfil
     );
 
