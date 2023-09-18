@@ -6,7 +6,7 @@ Future<bool> loginUser(String email, String password) async {
     CollectionReference users = FirebaseFirestore.instance.collection('usuarios');
 
     // Consulta Firestore para encontrar un usuario con el correo electrónico proporcionado
-    QuerySnapshot querySnapshot = await users.where('Correo', isEqualTo: email).get();
+    QuerySnapshot querySnapshot = await users.where('correo', isEqualTo: email).get();
 
     if (querySnapshot.size == 0) {
       // El usuario no existe en la base de datos
@@ -14,7 +14,7 @@ Future<bool> loginUser(String email, String password) async {
     } else {
       // Usuario encontrado, ahora verifica la contraseña
       var userDoc = querySnapshot.docs[0];
-      if (userDoc['Contrasena'] == password) {
+      if (userDoc['contrasena'] == password) {
         // La contraseña coincide, el usuario está autenticado con éxito
         return true;
       } else {
@@ -38,7 +38,7 @@ Future<void> printAvailableEmails() async {
 
     print('Correos disponibles:');
     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      print(doc['Correo']);
+      print(doc['correo']);
     }
   } catch (e) {
     print('Error al obtener correos disponibles: $e');

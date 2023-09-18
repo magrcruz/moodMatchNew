@@ -12,12 +12,11 @@ import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clas
 import 'package:mood_match/models/user_profile.dart';
 
 UserProfile dummyUser = UserProfile(
-      name: "John Doe",
-      username: "johndoe123",
-      isPremium: true, // Cambia a false si el usuario no es premium
-      profileImageURL: ''
-          "https://example.com/profile-image.jpg", // URL de la imagen de perfil
-    );
+    username: 'Pantalon para tiendas',
+    profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
+    isPremium: true,
+    name: 'namesito'
+);
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => HomeScreen(), // Ruta de inicio
