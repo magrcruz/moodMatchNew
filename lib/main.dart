@@ -19,10 +19,15 @@ void main() async {
   runApp(MyApp(settingsController: settingsController));
 }
 */
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'routes/routes.dart'; // Importa tus rutas desde routes.dart
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
