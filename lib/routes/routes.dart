@@ -24,13 +24,7 @@ final Map<String, WidgetBuilder> routes = {
   '/home': (context) => HomeScreen(), // Ruta de inicio
   '/index': (context) => Index(),
   '/choose_emotion': (context) => ChooseEmotion(),
-  '/recommendation_results/:type/:emotion': (context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    return RecommendationResults(
-      type: args['type'],
-      emotion: args['emotion'],
-    );
-  },
+  '/recommendation_results': (context) => RecommendationResults(),
   '/choose_content': (context) => ChooseContent(),
   '/genre_preferences': (context) => GenrePreferences(),
   '/show_info': (context) => ShowInfo(),
