@@ -8,6 +8,7 @@ import 'package:mood_match/screens/show_info.dart';
 import 'package:mood_match/screens/signup.dart';
 import 'package:mood_match/screens/user_info.dart';
 import 'package:mood_match/screens/login.dart';
+import 'package:mood_match/screens/google_auth.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
 
@@ -29,5 +30,6 @@ final Map<String, WidgetBuilder> routes = {
   '/show_info': (context) => ShowInfo(),
   '/user_info': (context) => UserProfileWidget(userInfo: dummyUser),
   '/login':(context) => LoginPage(),
-  '/signup':(context) => SignUp()
+  '/signup':(context) => SignUp(),
+  '/google_auth':(context) => GoogleAuth()
 };
