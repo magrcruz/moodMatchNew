@@ -18,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nombre'),
+                decoration: const InputDecoration(labelText: 'Nombre'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingresa tu nombre.';
@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Apellido'),
+                decoration: const InputDecoration(labelText: 'Apellido'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingresa tu apellido.';
@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _ageController,
-                decoration: InputDecoration(labelText: 'Edad'),
+                decoration: const InputDecoration(labelText: 'Edad'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingresa tu edad.';
@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
+                decoration: const InputDecoration(labelText: 'Username'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingresa tu username.';
@@ -70,10 +70,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await registerUser();
-                    Navigator.pushReplacementNamed(context, '/index');
+                    if(context.mounted){
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
                   }
                 },
-                child: Text('Registrar'),
+                child: const Text('Registrar'),
               ),
             ],
           ),

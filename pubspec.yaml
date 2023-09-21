@@ -31,7 +31,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter_native_splash:
-  color: "#BF2828"
+  color: "#1B1B1B"
 
 flutter:
   uses-material-design: true
@@ -43,3 +43,4 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/
     - assets/animations/splash.json
+    - assets/animations/splash2.json

@@ -22,7 +22,7 @@ class _IndexState extends State<Index> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/home');
               },
               child: const Text('Ir a Home'),
             ),
@@ -31,6 +31,18 @@ class _IndexState extends State<Index> {
                 Navigator.pushNamed(context, '/login');
               },
               child: const Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/splash');
+              },
+              child: const Text('splash'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/splash2');
+              },
+              child: const Text('splash2'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -73,6 +85,12 @@ class _IndexState extends State<Index> {
                 Navigator.pushNamed(context, '/show_info');
               },
               child: const Text('Ir a ShowInfo'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/signout');
+              },
+              child: const Text('Ir a signOut'),
             ),
             ElevatedButton(
               onPressed: () {
