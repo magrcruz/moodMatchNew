@@ -19,6 +19,7 @@ void main() async {
   runApp(MyApp(settingsController: settingsController));
 }
 */
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: customSwatch, // Usa el MaterialColor personalizado
         fontFamily: 'Raleway',
       ),
-      initialRoute: '/home', // Establece la ruta inicial en '/index'
+      initialRoute: '/splash', // Establece la ruta inicial en '/index'
       routes: routes, // Utiliza las rutas definidas en routes.dart
     );
   }

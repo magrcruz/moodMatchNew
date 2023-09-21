@@ -12,6 +12,9 @@ import 'package:mood_match/screens/google_auth.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
 
+import '../screens/register.dart';
+import '../screens/splash.dart';
+
 UserProfile dummyUser = UserProfile(
     username: 'Pantalon para tiendas',
     profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
@@ -20,7 +23,7 @@ UserProfile dummyUser = UserProfile(
 );
 
 final Map<String, WidgetBuilder> routes = {
-  '/': (context) => HomeScreen(), // Ruta de inicio
+  // '/': (context) => HomeScreen(), // Ruta de inicio
   '/home': (context) => HomeScreen(), // Ruta de inicio
   '/index': (context) => Index(),
   '/choose_emotion': (context) => ChooseEmotion(),
@@ -31,5 +34,7 @@ final Map<String, WidgetBuilder> routes = {
   '/user_info': (context) => UserProfileWidget(userInfo: dummyUser),
   '/login':(context) => LoginPage(),
   '/signup':(context) => SignUp(),
+  '/register':(context) => RegisterScreen(),
+  '/splash':(context) => SplashScreen(),
   '/google_auth':(context) => GoogleAuth()
 };
