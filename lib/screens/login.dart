@@ -38,6 +38,7 @@ class LoginPage extends StatelessWidget {
                   String email = emailController.text;
                   String password = passwordController.text;
 
+
                   // Llama a la función loginUser para verificar el inicio de sesión
                   bool loginSuccessful = await loginUser(email, password);
 
@@ -56,7 +57,7 @@ class LoginPage extends StatelessWidget {
                         content: Text('Error: Correo o contraseña incorrectos'),
                       ),
                     );
-
+                    
                     // Puedes borrar el texto de los campos de correo y contraseña si lo deseas
                     emailController.clear();
                     passwordController.clear();

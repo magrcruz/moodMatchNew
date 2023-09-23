@@ -57,8 +57,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: customSwatch, // Usa el MaterialColor personalizado
         fontFamily: 'Raleway',
       ),
-      initialRoute: '/home', // Establece la ruta inicial en '/index'
+      initialRoute: '/login', // Establece la ruta inicial en '/index'
       routes: routes, // Utiliza las rutas definidas en routes.dart
     );
   }
 }
+

@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/index');
+                Navigator.pushNamed(context, '/choose_content');
               },
               child: const Text(
                 'Comencemos',
