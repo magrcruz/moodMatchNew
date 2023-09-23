@@ -8,8 +8,14 @@ import 'package:mood_match/screens/show_info.dart';
 import 'package:mood_match/screens/signup.dart';
 import 'package:mood_match/screens/user_info.dart';
 import 'package:mood_match/screens/login.dart';
+import 'package:mood_match/screens/google_auth.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
+
+import '../screens/logout.dart';
+import '../screens/register.dart';
+import '../screens/splash.dart';
+import '../screens/splash2.dart';
 
 UserProfile dummyUser = UserProfile(
     username: 'Pantalon para tiendas',
@@ -19,7 +25,7 @@ UserProfile dummyUser = UserProfile(
 );
 
 final Map<String, WidgetBuilder> routes = {
-  '/': (context) => HomeScreen(), // Ruta de inicio
+  // '/': (context) => HomeScreen(), // Ruta de inicio
   '/home': (context) => HomeScreen(), // Ruta de inicio
   '/index': (context) => Index(),
   '/choose_emotion': (context) => ChooseEmotion(),
@@ -29,5 +35,10 @@ final Map<String, WidgetBuilder> routes = {
   '/show_info': (context) => ShowInfo(),
   '/user_info': (context) => UserProfileWidget(userInfo: dummyUser),
   '/login':(context) => LoginPage(),
-  '/signup':(context) => SignUp()
+  '/signup':(context) => SignUp(),
+  '/register':(context) => RegisterScreen(),
+  '/splash':(context) => SplashScreen(),
+  '/splash2':(context) => SplashScreen2(),
+  '/google_auth':(context) => GoogleAuth(),
+  '/signout':(context) => signOutPage()
 };
