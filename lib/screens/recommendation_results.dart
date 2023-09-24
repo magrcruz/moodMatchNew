@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_match/Services/API.dart';
 
 class RecommendationResults extends StatefulWidget {
   final String? type;
@@ -17,6 +18,7 @@ class RecommendationResults extends StatefulWidget {
 class _RecommendationResultsState extends State<RecommendationResults> {
   @override
   Widget build(BuildContext context) {
+    APIService().getDiscoverMovies('35');//Aqui pasar los generos
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resultados de la Recomendación'),
