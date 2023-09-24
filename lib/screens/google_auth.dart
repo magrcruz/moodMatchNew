@@ -8,14 +8,56 @@ class GoogleAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Google Auth'),
+        title: Text('Google Auth'),
       ),
       body: Center(
-        child: buildGoogleSignInButton(context),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Logo de Mood Match y texto
+            Column(
+              children: <Widget>[
+                const CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo.png'),//NetworkImage(currentUser.profileImageURL),
+                  radius: 100,
+                ),
+                SizedBox(height: 16), // Espacio entre el texto y el logo ,
+                Text(
+                  'Sintonizando tus emociones',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 20),
+
+            // Botón de inicio de sesión de Google
+            ElevatedButton.icon(
+              onPressed: () {
+                signInWithGoogle(context);
+              },
+              icon: Image.asset(
+                'assets/images/google_logo.png', // Ruta de la imagen del logo de Google
+                width: 24, // Ajusta el ancho según tus necesidades
+                height: 24, // Ajusta la altura según tus necesidades
+              ),
+              label: Text('Iniciar sesión con Google'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white, // Color de fondo blanco
+                onPrimary: Colors.black, // Color del texto negro
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Ajusta el radio de borde según tus necesidades
+                  side: BorderSide(color: Colors.black), // Borde negro
+                ),
+              ),
+            ),
+
+          ],
+        ),
       ),
     );
   }
-
+/*
   Widget buildGoogleSignInButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -31,7 +73,9 @@ class GoogleAuth extends StatelessWidget {
         ],
       ),
     );
-  }
+    */
+
+
 
   signInWithGoogle(BuildContext context) async {
     final currentContext = context;

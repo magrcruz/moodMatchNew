@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserProfile currentUser = UserProfile(
-      username: user?.email ?? "Hola",
+      username: user?.displayName ?? "Hola",
       profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
       isPremium: true,
       name: 'namesito'
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/choose_content');
               },
               child: const Text(
-                'Comencemos',
+                '¿Comenzamos?',
                 style: TextStyle(fontSize: 18),
               ),
             ),
