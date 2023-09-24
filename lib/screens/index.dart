@@ -64,7 +64,8 @@ class _IndexState extends State<Index> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/recommendation_results/default/default');
+                Navigator.pushNamed(
+                    context, '/recommendation_results/default/default');
               },
               child: const Text('Ir a RecommendationResults'),
             ),
