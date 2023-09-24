@@ -2,13 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:mood_match/widgets/custom_app_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 class GoogleAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Google Auth'),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
       body: Center(
         child: Column(
@@ -17,6 +19,16 @@ class GoogleAuth extends StatelessWidget {
             // Logo de Mood Match y texto
             Column(
               children: <Widget>[
+                Text(
+                  'Inicia Sesión ',
+                  style: TextStyle(fontSize: 30),
+                ),
+                SizedBox(height: 5), // Espacio entre el texto y el logo ,
+                Text(
+                  'con Google',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 16), // Espacio entre el texto y el logo ,
                 const CircleAvatar(
                   backgroundImage: AssetImage('assets/images/logo.png'),//NetworkImage(currentUser.profileImageURL),
                   radius: 100,
@@ -24,7 +36,12 @@ class GoogleAuth extends StatelessWidget {
                 SizedBox(height: 16), // Espacio entre el texto y el logo ,
                 Text(
                   'Sintonizando tus emociones',
-                  style: TextStyle(fontSize: 16),
+                  style: GoogleFonts.shadowsIntoLight(
+                    textStyle: Theme.of(context).textTheme.displayLarge,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
             ),

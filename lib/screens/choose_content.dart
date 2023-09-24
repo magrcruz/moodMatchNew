@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
+import 'package:mood_match/widgets/custom_app_bar.dart';
 class ChooseContent extends StatefulWidget {
   @override
   _ChooseContentState createState() => _ChooseContentState();
@@ -11,12 +12,19 @@ class _ChooseContentState extends State<ChooseContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Selecciona el Contenido'),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
       body: ListView(
         children: <Widget>[
-          SizedBox(height: 100), // Espacio encima del primer boton
+          SizedBox(height: 16), // Espacio encima del primer boton
+          Text(
+            '¿Qué tipo de contenido deseas hoy?',
+            style: TextStyle(fontSize: 30),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16), // Espacio encima del primer boton
           _buildContentButton('Música', 'assets/images/music.png', 'music'),
           SizedBox(height: 16), // Espacio vertical entre botones
           _buildContentButton('Películas', 'assets/images/movie.png', 'movie'),
