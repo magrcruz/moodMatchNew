@@ -30,14 +30,18 @@ class GoogleAuth extends StatelessWidget {
                 ),
                 SizedBox(height: 16), // Espacio entre el texto y el logo ,
                 const CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/logo.png'),//NetworkImage(currentUser.profileImageURL),
+                  backgroundImage: AssetImage('assets/images/logo.png'),
+                  //NetworkImage(currentUser.profileImageURL),
                   radius: 100,
                 ),
                 SizedBox(height: 16), // Espacio entre el texto y el logo ,
                 Text(
                   'Sintonizando tus emociones',
                   style: GoogleFonts.shadowsIntoLight(
-                    textStyle: Theme.of(context).textTheme.displayLarge,
+                    textStyle: Theme
+                        .of(context)
+                        .textTheme
+                        .displayLarge,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.italic,
@@ -50,11 +54,26 @@ class GoogleAuth extends StatelessWidget {
 
             // Botón de inicio de sesión de Google
             ElevatedButton.icon(
-              onPressed: () {
-                signInWithGoogle(context);
+              onPressed: () async {
+                String? uid = await signInWithGoogle();
+                if (uid != null) {
+                  bool isUserRegistered = await checkIfUserIsRegistered(uid);
+                  if (isUserRegistered) {
+                    if (context.mounted) {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
+                  } else {
+                    if (context.mounted) {
+                      Navigator.pushReplacementNamed(context, '/pre_register');
+                    }
+                  }
+                } else {
+                  //Navegar a screen de error
+                }
               },
               icon: Image.asset(
-                'assets/images/google_logo.png', // Ruta de la imagen del logo de Google
+                'assets/images/google_logo.png',
+                // Ruta de la imagen del logo de Google
                 width: 24, // Ajusta el ancho según tus necesidades
                 height: 24, // Ajusta la altura según tus necesidades
               ),
@@ -63,7 +82,8 @@ class GoogleAuth extends StatelessWidget {
                 primary: Colors.white, // Color de fondo blanco
                 onPrimary: Colors.black, // Color del texto negro
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Ajusta el radio de borde según tus necesidades
+                  borderRadius: BorderRadius.circular(10.0),
+                  // Ajusta el radio de borde según tus necesidades
                   side: BorderSide(color: Colors.black), // Borde negro
                 ),
               ),
@@ -74,36 +94,23 @@ class GoogleAuth extends StatelessWidget {
       ),
     );
   }
-/*
-  Widget buildGoogleSignInButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              String? uid = await signInWithGoogle();
-              if (uid != null) {
-                bool isUserRegistered = await checkIfUserIsRegistered(uid);
-                if (isUserRegistered) {
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }
-                } else {
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, '/pre_register');
-                  }
-                }
-              }else{
-                //Navegar a screen de error
-              }
-            },
-            child: const Text('Login with Google'),
-          ),
-        ],
-      ),
-    );
-
-  }
 }
+//
+//   Widget buildGoogleSignInButton(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(16.0),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           ElevatedButton(
+//             onPressed: () async {
+//
+//             },
+//             child: const Text('Login with Google'),
+//           ),
+//         ],
+//       ),
+//     );
+//
+//   }
+// }
