@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:mood_match/Services/API.dart'; // Reemplaza esto con el nombre de tu servicio de API
-import 'package:mood_match/Models/SearchResult.dart'; // Asegúrate de importar tus modelos correctamente
+import 'package:mood_match/models/SearchResult.dart'; // Asegúrate de importar tus modelos correctamente
 import 'package:mood_match/controllers/genresClassification.dart';
 
 Map<String, String> label_meaning = {
@@ -14,12 +14,12 @@ Map<String, String> label_meaning = {
 };
 
 Future<List<SearchResult>> getRecommended(
-    String type, String emotion, String genres) async {//Actualizar a lista d strings
+    String type, String emotion) async {//Actualizar a lista d strings
   const double threshold = 0.8;
   try {
     final apiService = APIService(); // Reemplaza YourAPIService con tu clase de servicio de API
     //final genres = "16%2C35"; // Reemplaza esto con los géneros que deseas buscar
-    genres = getGenreIdsAsString(emotion);
+    String genres = getGenreIdsAsString(emotion);
     final results = await apiService.getMoviesEpisodes(type, genres);
 
     final List<SearchResult> recommendedMovies = [];
@@ -34,7 +34,7 @@ Future<List<SearchResult>> getRecommended(
       if (recommendedMovies.length >= 5) {
         break; // Límite de resultados recomendados alcanzado
       }
-      print(result);
+      //print(result);
     }
 
     // Paso 6: Retornar la lista de películas recomendadas

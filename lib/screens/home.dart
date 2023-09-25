@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 50),
             CircleAvatar(
               backgroundImage: NetworkImage(userImageURL), // Carga la imagen desde la URL
-              radius: 100,
+              radius: 50,
             ),
             SizedBox(height: 20),
             Text(

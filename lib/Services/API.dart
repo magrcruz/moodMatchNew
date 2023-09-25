@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mood_match/Models/EpisodeDetail.dart';
 import 'package:mood_match/Models/MovieDetail.dart';
 import 'package:mood_match/Models/PopularMovies.dart';
-import 'package:mood_match/Models/SearchResult.dart';
+import 'package:mood_match/models/SearchResult.dart';
 import 'package:mood_match/Models/TvShow.dart';
 import 'package:mood_match/Models/TvShowDetail.dart';
 import 'package:mood_match/Models/VideoDetails.dart';

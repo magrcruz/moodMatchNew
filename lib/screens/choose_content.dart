@@ -29,7 +29,7 @@ class _ChooseContentState extends State<ChooseContent> {
           SizedBox(height: 16), // Espacio vertical entre botones
           _buildContentButton('Películas', 'assets/images/movie.png', 'movie'),
           SizedBox(height: 16), // Espacio vertical entre botones
-          _buildContentButton('Series', 'assets/images/serie.png', 'serie'),
+          _buildContentButton('Series', 'assets/images/serie.png', 'tv'),
           // Agrega más botones si es necesario
         ],
       ),
