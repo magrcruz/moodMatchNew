@@ -5,22 +5,23 @@ import 'package:mood_match/models/user_profile.dart';
 
 class HomeScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
+    String userImageURL = user?.photoURL ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
+
     UserProfile currentUser = UserProfile(
-      username: user?.displayName ?? "Hola",
-      profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
+      username: user?.displayName ?? "Usuario",
+      profileImageURL: userImageURL, // Asigna la URL de la imagen
       isPremium: true,
-      name: 'namesito'
+      name: 'namesito',
     );
-
-
 
     int numberOfRecommendations = 10;
     String lastRecommendation = "The Big Bang Theory";
 
     return Scaffold(
-      appBar: const PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: CustomAppBar(),
       ),
@@ -28,50 +29,77 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const CircleAvatar(
-              backgroundImage: AssetImage('assets/images/logo.png'),//NetworkImage(currentUser.profileImageURL),
+            SizedBox(height: 50),
+            CircleAvatar(
+              backgroundImage: NetworkImage(userImageURL), // Carga la imagen desde la URL
               radius: 100,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
+            Text(
+              '¡Hola!',
+              style: TextStyle(fontSize: 30),
+              textAlign: TextAlign.center,
+            ),
             Text(
               currentUser.username,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'Recomendaciones Hechas:',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                Card(
+                  margin: const EdgeInsets.all(20),
+                  elevation: 5,
+                  shadowColor: Colors.black,
+                  child: SizedBox(
+                    width: 250,
+                    height: 80,
+                    child: ListTile(
+                      title: const Text(
+                        'Recomendaciones',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      subtitle: Text(
+                        '$numberOfRecommendations',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      '$numberOfRecommendations',
-                      style: const TextStyle(fontSize: 20, color: Colors.blue),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'Última Recomendación:',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                Card(
+                  margin: const EdgeInsets.all(20),
+                  elevation: 5,
+                  shadowColor: Colors.black,
+                  child: SizedBox(
+                    width: 250,
+                    height: 80,
+                    child: ListTile(
+                      title: const Text(
+                        'Última Recomendación:',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      subtitle: Text(
+                        lastRecommendation,
+                        style: const TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      '$lastRecommendation',
-                      style: const TextStyle(fontSize: 20, color: Colors.blue),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/choose_content');
@@ -81,6 +109,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
             ),
+            SizedBox(height: 30),
           ],
         ),
       ),
