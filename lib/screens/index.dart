@@ -40,12 +40,6 @@ class _IndexState extends State<Index> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/splash2');
-              },
-              child: const Text('splash2'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 Navigator.pushNamed(context, '/google_auth');
               },
               child: const Text('Login with Google'),

@@ -34,12 +34,15 @@ class _SplashScreenState extends State<SplashScreen> {
       // Bloquea la acción de retroceso
       onWillPop: () async => false,
       child: Scaffold(
-          backgroundColor:Color(0xFFBF2828),
+        backgroundColor: Color(0xFFBF2828),
         body: Center(
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Lottie.asset('assets/animations/splash.json'),
+              Lottie.asset(
+                'assets/animations/splash.json',
+                frameRate: FrameRate(60),
+              ),
               SvgPicture.asset(
                 'assets/images/logo_2.svg',
                 width: 220,
