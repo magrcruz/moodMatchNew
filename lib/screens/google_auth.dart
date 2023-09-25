@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../services/firestore_manager.dart';
-import '../services/login_google.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 class GoogleAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -82,28 +82,58 @@ class GoogleAuth extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           ElevatedButton(
-            onPressed: () async {
-              String? uid = await signInWithGoogle();
-              if (uid != null) {
-                bool isUserRegistered = await checkIfUserIsRegistered(uid);
-                if (isUserRegistered) {
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }
-                } else {
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, '/pre_register');
-                  }
-                }
-              }else{
-                //Navegar a screen de error
-              }
+            onPressed: () {
+              signInWithGoogle(context);
             },
             child: const Text('Login with Google'),
           ),
         ],
       ),
     );
+    */
 
+
+
+  signInWithGoogle(BuildContext context) async {
+    final currentContext = context;
+
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    UserCredential userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    final User? user = userCredential.user;
+
+    if (user != null) {
+      bool isUserRegistered = await checkIfUserIsRegistered(user.uid);
+
+      if (isUserRegistered) {
+        if(context.mounted){
+          Navigator.pushReplacementNamed(currentContext, '/home');
+        }
+      } else {
+        if(context.mounted){
+          Navigator.pushReplacementNamed(currentContext, '/register');
+        }
+      }
+    }
+  }
+
+  Future<bool> checkIfUserIsRegistered(String uid) async {
+    try {
+      final DocumentSnapshot document =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      return document.exists;
+    } catch (error) {
+      print('Firestore Error: $error');
+      return false;
+    }
   }
 }

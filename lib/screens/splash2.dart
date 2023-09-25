@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen2 extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen2> {
   @override
   void initState() {
     super.initState();
@@ -34,16 +34,23 @@ class _SplashScreenState extends State<SplashScreen> {
       // Bloquea la acción de retroceso
       onWillPop: () async => false,
       child: Scaffold(
-          backgroundColor:Color(0xFFBF2828),
+        backgroundColor: Color(0xFF1B1B1B),
         body: Center(
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Lottie.asset('assets/animations/splash.json'),
+              Lottie.asset(
+                'assets/animations/splash2.json',
+                frameRate: FrameRate(60),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.cover,
+                repeat: false,
+              ),
               SvgPicture.asset(
                 'assets/images/logo_2.svg',
-                width: 220,
-                height: 220,
+                width: 250,
+                height: 250,
               ),
             ],
           ),
