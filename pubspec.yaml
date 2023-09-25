@@ -23,6 +23,10 @@ dependencies:
   cached_network_image: ^3.2.3
   firebase_auth: ^4.10.0
   google_sign_in: ^6.1.5
+  image_picker: ^1.0.4
+  firebase_storage: ^11.2.7
+  flutter_holo_date_picker: ^1.1.2+1
+  intl: ^0.18.1
   dio: ^5.3.3
   url_launcher: ^6.1.14
   unicons: ^2.1.1
