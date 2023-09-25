@@ -13,9 +13,9 @@ import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clas
 import 'package:mood_match/models/user_profile.dart';
 
 import '../screens/logout.dart';
-import '../screens/pre_register.dart';
 import '../screens/register.dart';
 import '../screens/splash.dart';
+import '../screens/splash2.dart';
 
 UserProfile dummyUser = UserProfile(
     username: 'Pantalon para tiendas',
@@ -37,8 +37,8 @@ final Map<String, WidgetBuilder> routes = {
   '/login':(context) => LoginPage(),
   '/signup':(context) => SignUp(),
   '/register':(context) => RegisterScreen(),
-  '/pre_register':(context) => PreRegisterScreen(),
   '/splash':(context) => SplashScreen(),
+  '/splash2':(context) => SplashScreen2(),
   '/google_auth':(context) => GoogleAuth(),
   '/signout':(context) => signOutPage()
 };
