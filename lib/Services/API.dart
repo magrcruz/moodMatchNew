@@ -6,12 +6,12 @@ import 'package:mood_match/models/SearchResult.dart';
 import 'package:mood_match/Models/TvShow.dart';
 import 'package:mood_match/Models/TvShowDetail.dart';
 import 'package:mood_match/Models/VideoDetails.dart';
-import 'package:mood_match/Services/key.dart';
+// import 'package:mood_match/Services/key.dart';
 
 class APIService {
   final Dio _dio = Dio();
   final String baseUrl = 'https://api.themoviedb.org/3';
-  final String apiKey = 'api_key=$api_key';
+  final String apiKey = 'api_key=ed5e66b6e5d9db5d19e3a127aafcb3f5';
 
   Future<List<Results>> getPopularMovie() async {
     try {

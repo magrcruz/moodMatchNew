@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:intl/intl.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -11,8 +13,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _usernameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: _lastNameController,
                 decoration: const InputDecoration(labelText: 'Apellido'),
@@ -46,31 +49,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _ageController,
-                decoration: const InputDecoration(labelText: 'Edad'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingresa tu edad.';
+              SizedBox(height: 20),
+              TextField(
+                controller: dateController, //editing controller of this TextField
+                decoration: const InputDecoration(
+                    icon: Icon(Icons.calendar_today), //icon of text field
+                    labelText: "Enter Date" //label text of field
+                ),
+                readOnly: true,  // when true user cannot edit text
+                onTap: () async {
+                  DateTime? pickedDate = await DatePicker.showSimpleDatePicker(
+                    context,
+                    initialDate: _selectedDate,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                    dateFormat: "dd-MMMM-yyyy",
+                    locale: DateTimePickerLocale.en_us,
+                    looping: true,
+                  );
+                  if(pickedDate != null ){
+                    String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                    setState(() {
+                      dateController.text = formattedDate;
+                      _selectedDate = pickedDate;
+                    });
                   }
-                  return null;
                 },
               ),
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingresa tu username.';
-                  }
-                  return null;
-                },
-              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await registerUser();
-                    if(context.mounted){
+                    if (context.mounted) {
                       Navigator.pushReplacementNamed(context, '/home');
                     }
                   }
@@ -90,17 +101,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (user != null) {
         final userData = {
-          'nombre': _nameController.text,
-          'apellido': _lastNameController.text,
-          'edad': _ageController.text,
-          'username': _usernameController.text,
-          'email': user.email,
+          'name': _nameController.text,
+          'last_name': _lastNameController.text,
+          'age': Timestamp.fromDate(_selectedDate),
+          // Guarda la fecha como Timestamp
         };
 
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
-            .set(userData);
+            .update(userData);
       }
     } catch (error) {
       print('Error al registrar el usuario: $error');

@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../Services/firestore_manager.dart';
+import '../Services/login_google.dart';
 class GoogleAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
