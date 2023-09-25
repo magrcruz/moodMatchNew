@@ -24,7 +24,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'routes/routes.dart'; // Importa tus rutas desde routes.dart
-
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +56,9 @@ class MyApp extends StatelessWidget {
       title: 'Mood Match',
       theme: ThemeData(
         primarySwatch: customSwatch, // Usa el MaterialColor personalizado
-        fontFamily: 'Raleway',
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
       initialRoute: '/splash', // Establece la ruta inicial en '/index'
       routes: routes, // Utiliza las rutas definidas en routes.dart

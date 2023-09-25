@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:mood_match/controllers/recommendations.dart';
+import 'package:mood_match/models/SearchResult.dart';
 class RecommendationResults extends StatefulWidget {
   final String? type;
   final String? selectedEmotion;
 
   RecommendationResults({
-    this.type, // Proporciona un valor predeterminado
+    this.type,
     this.selectedEmotion,
   });
 
@@ -13,8 +14,28 @@ class RecommendationResults extends StatefulWidget {
   _RecommendationResultsState createState() => _RecommendationResultsState();
 }
 
-
 class _RecommendationResultsState extends State<RecommendationResults> {
+  List<SearchResult>? _recommendations; // Cambio el tipo a List<SearchResult>
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecommendations(); // Llama a una función para cargar las recomendaciones
+  }
+
+  Future<void> _loadRecommendations() async {
+    try {
+      final recommendations = await getRecommended(widget.type ?? '', widget.selectedEmotion ?? '');
+      setState(() {
+        _recommendations = recommendations as List<SearchResult>;
+      });
+    } catch (error) {
+      print('Error loading recommendations: $error');
+      _recommendations = [];
+      // Manejar errores aquí
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +54,23 @@ class _RecommendationResultsState extends State<RecommendationResults> {
               'Emoción seleccionada: ${widget.selectedEmotion}',
               style: const TextStyle(fontSize: 20),
             ),
-            // Aquí puedes agregar más widgets y lógica para la pantalla de resultados de recomendación
+            if (_recommendations == null)
+              CircularProgressIndicator() // Muestra un indicador de carga
+            else if (_recommendations!.isEmpty)
+              Text('No se encontraron resultados.') // Manejar el caso sin resultados
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _recommendations!.length,
+                  itemBuilder: (context, index) {
+                    final SearchResult result = _recommendations![index];
+                    // Aquí puedes personalizar cómo se muestra cada SearchResult
+                    return ListTile(
+                      title: Text(result.originalTitle?? 'Título no disponible'),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),
