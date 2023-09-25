@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/user_profile.dart';
-
+import 'package:mood_match/controllers/emotionClasification.dart';
 class HomeScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
   @override

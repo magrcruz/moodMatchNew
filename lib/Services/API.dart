@@ -93,9 +93,7 @@ class APIService {
       var shows = response.data['results'] as List;
       List<SearchResult> showsList =
           shows.map((m) => SearchResult.fromJson(m)).toList();
-      for (var sh in shows){
-        print('resultao ${sh}');
-      }
+      //for (var sh in shows){ print('resultao ${sh}');}
       return showsList;
     } catch (error) {
       return [];
@@ -259,16 +257,15 @@ class APIService {
     }
   }
 
-  Future<List<SearchResult>> getDiscoverMovies(String genres) async {
+  Future<List<SearchResult>> getMoviesEpisodes(String type, String genres) async {
+    //type: movie 
     try {
-      final url = '$baseUrl/discover/movie?$apiKey&language=en-US&page=1&sort_by=popularity.desc&with_genres=$genres';//16%2C35
+      final url = '$baseUrl/discover/$type?$apiKey&language=en-US&page=1&sort_by=popularity.desc&with_genres=$genres';//16%2C35
       final response = await _dio.get(url);
       var movies = response.data['results'] as List;
       List<SearchResult> moviesList =
           movies.map((m) => SearchResult.fromJson(m)).toList();
-      for (var sh in movies){
-        print('resultao ${sh}');
-      }
+      for (var sh in movies){ print('resultao ${sh}'); }
       return moviesList;
     } catch (error) {
       return [];

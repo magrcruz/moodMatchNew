@@ -46,5 +46,4 @@ app.*.map.json
 # google services
 /android/app/google-services.json
 
-#tmdb key
 /lib/Services/key.dart
