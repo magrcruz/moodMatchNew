@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'recommendation_results.dart';
-
+import 'package:mood_match/widgets/custom_app_bar.dart';
 class ChooseEmotion extends StatefulWidget {
   @override
   _ChooseEmotionState createState() => _ChooseEmotionState();
@@ -35,12 +35,18 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('¿Cómo te sientes hoy?'),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
       body: Column(
         children: [
-          SizedBox(height: 100.0), // Espacio encima de la cuadrícula de botones
+          SizedBox(height: 120), // Espacio encima de la cuadrícula de botones
+          Text(
+            '¿Cómo te sientes hoy?',
+            style: TextStyle(fontSize: 30),
+          ),
+          SizedBox(height: 30), // Espacio encima de la cuadrícula de botones
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
