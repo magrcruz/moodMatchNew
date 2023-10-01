@@ -54,3 +54,4 @@ flutter:
     - assets/images/
     - assets/animations/splash.json
     - assets/animations/splash2.json
+    - assets/animations/contentloader.json

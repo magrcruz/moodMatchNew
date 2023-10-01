@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/genre_title.dart';
-
+import 'package:mood_match/main.dart';
 class GenrePreferences extends StatefulWidget {
   @override
   _GenrePreferencesState createState() => _GenrePreferencesState();
@@ -34,11 +34,12 @@ class _GenrePreferencesState extends State<GenrePreferences> {
         children: <Widget>[
           const ListTile(
             title: Text(
-              'Selecciona los géneros de tu preferencia',
+              'Selecciona los géneros de música de tu preferencia',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
           Padding(
@@ -102,11 +103,11 @@ class _GenrePreferencesState extends State<GenrePreferences> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text('Géneros seleccionados ($count)'),
+                      title: Text('Géneros seleccionados ($count)',textAlign: TextAlign.center,),
                       content: Text(selectedGenres.join(', ')),
                       actions: [
                         TextButton(
-                          child: const Text('Cerrar'),
+                          child: const Text('Siguiente'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -118,7 +119,7 @@ class _GenrePreferencesState extends State<GenrePreferences> {
               },
               child: Text('Seleccionar (${selectedGenres.length})'),
               style: TextButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor:MyApp.customSwatch,
                 primary: Colors.white,
               ),
             ),
