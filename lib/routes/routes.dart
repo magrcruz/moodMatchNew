@@ -9,8 +9,10 @@ import 'package:mood_match/screens/signup.dart';
 import 'package:mood_match/screens/user_info.dart';
 import 'package:mood_match/screens/login.dart';
 import 'package:mood_match/screens/google_auth.dart';
+import 'package:mood_match/screens/details.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
+
 
 import '../screens/logout.dart';
 import '../screens/pre_register.dart';
@@ -42,5 +44,7 @@ final Map<String, WidgetBuilder> routes = {
   '/splash':(context) => SplashScreen(),
   '/splash2':(context) => SplashScreen2(),
   '/google_auth':(context) => GoogleAuth(),
-  '/signout':(context) => signOutPage()
+  '/signout':(context) => signOutPage(),
+  '/details':(context) => Details()
+
 };

@@ -4,7 +4,7 @@ import 'package:mood_match/controllers/recommendations.dart';
 import 'package:mood_match/models/SearchResult.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
-
+import 'details.dart';
 class RecommendationResults extends StatefulWidget {
   final String? type;
   final String? selectedEmotion;
@@ -146,7 +146,17 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                           ),
                           trailing: ElevatedButton(
                             onPressed: () {
-                              // Acción cuando se presiona el botón de detalles
+                              final contentSelected = Details(
+                                type: widget.type, // Reemplaza 'type' con el valor adecuado
+                                title: _recommendations![index].originalTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
+                              );
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => contentSelected,
+                                ),
+                              );
                             },
                             child: Text('Detalles', style: TextStyle(fontSize: 14)),
                             style: ElevatedButton.styleFrom(
@@ -155,7 +165,7 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                             ),
                           ),
                           onTap: () {
-                            // Acción cuando se toca en cualquier parte del ListTile
+
                           },
                         ),
                     ],
@@ -168,3 +178,4 @@ class _RecommendationResultsState extends State<RecommendationResults> {
     );
   }
 }
+
