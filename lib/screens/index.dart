@@ -77,7 +77,7 @@ class _IndexState extends State<Index> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/genre_preferences_music');
+                Navigator.pushNamed(context, '/genremusic_preferences');
               },
               child: const Text('Ir a GenrePreferences'),
             ),
