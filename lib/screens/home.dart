@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
             Column(
               children: <Widget>[
                 Card(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(15),
                   elevation: 5,
                   shadowColor: Colors.black,
                   child: SizedBox(
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Card(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(15),
                   elevation: 5,
                   shadowColor: Colors.black,
                   child: SizedBox(

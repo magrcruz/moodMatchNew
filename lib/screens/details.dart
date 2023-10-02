@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 
 class ContentDetails {
   final String genre;
@@ -17,10 +20,11 @@ class ContentDetails {
 }
 
 class Details extends StatefulWidget {
+  final num id;
   final String? type;
   final String? title;
 
-  Details({this.type, this.title});
+  Details({required this.id,this.type, this.title});
 
   @override
   _DetailsContent createState() => _DetailsContent();
@@ -52,6 +56,9 @@ class _DetailsContent extends State<Details> {
         child: ListView(
           children: [
             _buildImageCard(contentDetails!.imageUrl),
+            LikeDislikeWidget(
+              details: widget, // Pasa la instancia de Details
+            ),
             _buildSectionHeader('Título'),
             _buildSectionContent(widget.title ?? 'Título no disponible'),
             _buildSectionHeader('Género'),
@@ -87,27 +94,61 @@ class _DetailsContent extends State<Details> {
     );
   }
 
-  Widget _buildImageCard(String imageUrl) {
-    return Container(
-      height: 200,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: imageUrl.isNotEmpty
-            ? Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: 200,
-        )
-            : Image.asset(
-          'assets/images/defaultMovie.png',
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: 200,
-        ),
-      ),
-    );
+Future<bool> _imageExistsOnline(String imageUrl) async {
+  if (imageUrl.isEmpty) {
+    return false;
   }
+  final Uri uri = Uri.parse(imageUrl);
+  if (!uri.isAbsolute) {
+    return false;
+  }
+  try {
+    final response = await http.head(uri);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch (e) {
+    return false;
+  }
+}
+
+Widget _buildImageCard(String imageUrl) {
+  return Container(
+    height: 200,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: FutureBuilder<bool>(
+        future: _imageExistsOnline(imageUrl),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Puedes mostrar un indicador de carga mientras se verifica la existencia de la imagen.
+          } else if (snapshot.hasError || snapshot.data == null || !(snapshot.data?? false) ){
+            // Si hay un error, si snapshot.data es nulo o si la imagen no existe en la red, muestra una imagen predeterminada.
+            return Image.asset(
+              'assets/images/defaultMovie.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 200,
+            );
+          } else {
+            // Si la imagen existe en la red, muestra la imagen desde la URL.
+            return Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 200,
+            );
+          }
+        },
+      ),
+    ),
+  );
+}
+
 
   Future<ContentDetails> fetchContentDetails(String? type, String? title) async {
     // Tu lógica para obtener los detalles del contenido desde el backend
@@ -119,6 +160,55 @@ class _DetailsContent extends State<Details> {
       synopsisOrArtist: 'Una emocionante historia de aventuras.',
       platforms: ['Netflix', 'Amazon Prime', 'Hulu'],
       imageUrl: ' ',
+    );
+  }
+}
+
+
+
+class LikeDislikeWidget extends StatefulWidget {
+  final Details details;
+
+  LikeDislikeWidget({required this.details});
+
+  @override
+  _LikeDislikeWidgetState createState() => _LikeDislikeWidgetState();
+}
+
+class _LikeDislikeWidgetState extends State<LikeDislikeWidget> {
+  void _addPreference(String type, bool liked) {
+    final preferencesCollection = FirebaseFirestore.instance.collection('preferences');
+    final userUid = FirebaseAuth.instance.currentUser!.uid;
+    final preferencesDocument = preferencesCollection.doc(userUid);
+
+    preferencesDocument.set(
+      {
+        'likes_dislikes.${widget.details.id}': {
+          'type': type,
+          'liked': liked,
+        },
+      },
+      SetOptions(merge: true), // Esto fusionará los datos o creará el documento si no existe.
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.thumb_up),
+          onPressed: () {
+            _addPreference('pelicula', true);
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.thumb_down),
+          onPressed: () {
+            _addPreference('pelicula', false);
+          },
+        ),
+      ],
     );
   }
 }

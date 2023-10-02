@@ -147,6 +147,7 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                           trailing: ElevatedButton(
                             onPressed: () {
                               final contentSelected = Details(
+                                id: _recommendations![index].id!,
                                 type: widget.type, // Reemplaza 'type' con el valor adecuado
                                 title: _recommendations![index].originalTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
                               );
