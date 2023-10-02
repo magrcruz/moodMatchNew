@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../Services/firestore_manager.dart';
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -111,6 +113,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             .collection('users')
             .doc(user.uid)
             .update(userData);
+
+        await fetchAndSetUserData(user.uid);
       }
     } catch (error) {
       print('Error al registrar el usuario: $error');

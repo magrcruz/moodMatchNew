@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_match/services/firestore_manager.dart';
 
 import '../services/cloud_storage_manager.dart';
 import '../services/select_image.dart';
+import 'package:mood_match/models/SingletonUser.dart';
 
 class PreRegisterScreen extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class PreRegisterScreen extends StatefulWidget {
 class _PreRegisterScreenState extends State<PreRegisterScreen> {
   File? profile_image;
   final _nameController = TextEditingController();
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +30,15 @@ class _PreRegisterScreenState extends State<PreRegisterScreen> {
             GestureDetector(
               onTap: _pickImage,
               child: CircleAvatar(
-                  radius: 100,
-                  backgroundImage:
-                  profile_image != null ? FileImage(profile_image!) : null,
-                  child: const Icon(
-                    Icons.camera_alt,
-                    size: 60,
-                    color: Colors.white,
-                  )
+                radius: 100,
+                backgroundImage: profile_image != null
+                    ? FileImage(profile_image!)
+                    : NetworkImage(user!.photoURL!) as ImageProvider<Object>, // Cambio aquí
+                child: const Icon(
+                  Icons.camera_alt,
+                  size: 60,
+                  color: Colors.white,
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -48,7 +52,11 @@ class _PreRegisterScreenState extends State<PreRegisterScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                final urlProfileImage = await uploadProfileImage(profile_image!,_nameController.text);
+                String urlProfileImage = user!.photoURL!;
+                if(profile_image!=null){
+                  urlProfileImage = await uploadProfileImage(profile_image!, user!.uid);
+                }
+
                 savePreRegister(_nameController.text, urlProfileImage);
                 if (context.mounted) {
                   Navigator.pushReplacementNamed(context, '/register');
@@ -70,5 +78,4 @@ class _PreRegisterScreenState extends State<PreRegisterScreen> {
       });
     }
   }
-
 }
