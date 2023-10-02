@@ -1,56 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:mood_match/controllers/user_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/user_profile.dart';
 
-class UserProfileScreen extends StatefulWidget {
-  final String userEmail; // Correo electrónico del usuario
-
-  UserProfileScreen({required this.userEmail});
-
-  @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
-}
-
-class _UserProfileScreenState extends State<UserProfileScreen> {
-  late UserProfile _userInfo; // Variable para almacenar la información del usuario
-
-  @override
-  void initState() {
-    super.initState();
-    // Cuando se carga la pantalla, llama a la función para obtener la información del usuario
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    try {
-      final UserInfoController userInfoController = UserInfoController();
-      final UserProfile? userInfo = await userInfoController.getUserProfileByEmail(widget.userEmail);
-
-      if (userInfo != null) {
-        // Actualiza el estado con la información del usuario obtenida
-        setState(() {
-          _userInfo = userInfo;
-        });
-      } else {
-        // Maneja el caso en el que el usuario no exista en la base de datos
-        print('El usuario no existe en la base de datos.');
-      }
-    } catch (e) {
-      // Manejar cualquier error que ocurra al obtener la información del usuario
-      print('Error al cargar la información del usuario: $e');
-    }
-  }
+class UserInfoScreen extends StatelessWidget {
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
+    String userImageURL = user?.photoURL ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
+    String username = user?.displayName ?? "Usuario";
+    String userEmail = user?.email ?? "correo@example.com";
+    bool isPremium = true; // Puedes obtener esta información desde donde sea que determines si un usuario es premium o no
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Perfil de Usuario'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
-      backgroundColor: Colors.white, // Establece un fondo blanco para el Scaffold
-      body: _userInfo != null // Verifica si la información del usuario está disponible
-          ? UserProfileWidget(userInfo: _userInfo) // Muestra UserProfileWidget con la información
-          : Center(child: CircularProgressIndicator()), // Muestra un indicador de carga si aún no se ha cargado la información
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 50),
+              Text(
+                'Mi Perfil',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 50),
+              CircleAvatar(
+                backgroundImage: NetworkImage(userImageURL),
+                radius: 50,
+              ),
+              SizedBox(height: 20),
+              Card(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  title: Row(
+                    children: [
+                      Icon(Icons.person, size: 24),
+                      SizedBox(width: 10),
+                      Text(
+                        'Nombre de usuario',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    username,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              Card(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: ListTile(
+                  title: Row(
+                    children: [
+                      Icon(Icons.email, size: 24),
+                      SizedBox(width: 10),
+                      Text(
+                        'Correo Electrónico',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    userEmail,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              Card(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  title: Row(
+                    children: [
+                      Icon(Icons.star, size: 24),
+                      SizedBox(width: 10),
+                      Text(
+                        'Premium',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    isPremium ? 'Sí' : 'No',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
