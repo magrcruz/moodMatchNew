@@ -3,7 +3,9 @@ import 'package:mood_match/screens/index.dart';
 import 'package:mood_match/screens/choose_emotion.dart';
 import 'package:mood_match/screens/recommendation_results.dart';
 import 'package:mood_match/screens/choose_content.dart';
-import 'package:mood_match/screens/genre_preferences.dart';
+import 'package:mood_match/screens/genremusic_preferences.dart';
+import 'package:mood_match/screens/genremoviesseries_preferences.dart';
+import 'package:mood_match/screens/platforms_preferences.dart';
 import 'package:mood_match/screens/show_info.dart';
 import 'package:mood_match/screens/signup.dart';
 import 'package:mood_match/screens/user_info.dart';
@@ -34,7 +36,9 @@ final Map<String, WidgetBuilder> routes = {
   '/choose_emotion': (context) => ChooseEmotion(),
   '/recommendation_results': (context) => RecommendationResults(),
   '/choose_content': (context) => ChooseContent(),
-  '/genre_preferences': (context) => GenrePreferences(),
+  '/genremusic_preferences': (context) => GenremusicPreferences(),
+  '/genremoviesseries_preferences': (context) => GenremovieseriePreferences(),
+  '/platforms_preferences': (context) => PlatformsPreferences(),
   '/show_info': (context) => ShowInfo(),
   '/user_info': (context) => UserProfileWidget(userInfo: dummyUser),
   '/login':(context) => LoginPage(),

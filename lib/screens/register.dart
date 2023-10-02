@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (_formKey.currentState!.validate()) {
                     await registerUser();
                     if (context.mounted) {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/genremusic_preferences');
                     }
                   }
                 },
