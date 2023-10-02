@@ -45,6 +45,6 @@ final Map<String, WidgetBuilder> routes = {
   '/splash2':(context) => SplashScreen2(),
   '/google_auth':(context) => GoogleAuth(),
   '/signout':(context) => signOutPage(),
-  '/details':(context) => Details()
+  '/details':(context) => Details(id: 0000,)
 
 };

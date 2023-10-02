@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ContentDetails {
   final String genre;
@@ -17,10 +19,11 @@ class ContentDetails {
 }
 
 class Details extends StatefulWidget {
+  final num id;
   final String? type;
   final String? title;
 
-  Details({this.type, this.title});
+  Details({required this.id,this.type, this.title});
 
   @override
   _DetailsContent createState() => _DetailsContent();
@@ -52,6 +55,9 @@ class _DetailsContent extends State<Details> {
         child: ListView(
           children: [
             _buildImageCard(contentDetails!.imageUrl),
+            LikeDislikeWidget(
+              details: widget, // Pasa la instancia de Details
+            ),
             _buildSectionHeader('Título'),
             _buildSectionContent(widget.title ?? 'Título no disponible'),
             _buildSectionHeader('Género'),
@@ -95,9 +101,13 @@ class _DetailsContent extends State<Details> {
         child: imageUrl.isNotEmpty
             ? Image.network(
           imageUrl,
+          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+            return Image.asset('assets/images/defaultMovie.png'); 
+          },
           fit: BoxFit.cover,
           width: double.infinity,
           height: 200,
+
         )
             : Image.asset(
           'assets/images/defaultMovie.png',
@@ -122,3 +132,46 @@ class _DetailsContent extends State<Details> {
     );
   }
 }
+
+
+
+class LikeDislikeWidget extends StatefulWidget {
+  final Details details;
+
+  LikeDislikeWidget({required this.details});
+
+  @override
+  _LikeDislikeWidgetState createState() => _LikeDislikeWidgetState();
+}
+
+class _LikeDislikeWidgetState extends State<LikeDislikeWidget> {
+  void _addPreference(String type, bool liked) {
+    FirebaseFirestore.instance.collection('preferences').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'likes_dislikes.${widget.details.id}': {
+        'type': type,
+        'liked': liked,
+      },
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.thumb_up),
+          onPressed: () {
+            _addPreference('pelicula', true);
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.thumb_down),
+          onPressed: () {
+            _addPreference('pelicula', false);
+          },
+        ),
+      ],
+    );
+  }
+}
+
