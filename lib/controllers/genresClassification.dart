@@ -215,5 +215,5 @@ String getGenreIdsAsString(String emotion) {
     }
   }
 
-  return genreIds.join(','); // Une los IDs con espacios
+  return genreIds.join('|'); // Une los IDs con pipe para que sea uno u otro
 }

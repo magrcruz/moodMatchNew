@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mood_match/Models/EpisodeDetail.dart';
 import 'package:mood_match/Models/MovieDetail.dart';
 import 'package:mood_match/Models/PopularMovies.dart';
-import 'package:mood_match/models/SearchResult.dart';
+import 'package:mood_match/Models/SearchResult.dart';
 import 'package:mood_match/Models/TvShow.dart';
 import 'package:mood_match/Models/TvShowDetail.dart';
 import 'package:mood_match/Models/VideoDetails.dart';
@@ -260,7 +260,7 @@ class APIService {
   Future<List<SearchResult>> getMoviesEpisodes(String type, String genres) async {
     //type: movie 
     try {
-      final url = '$baseUrl/discover/$type?$apiKey&language=en-US&page=1&sort_by=popularity.desc&with_genres=$genres';//16%2C35
+      final url = '$baseUrl/discover/$type?$apiKey&language=en-US&page=1&with_genres=$genres';//16%2C35
       final response = await _dio.get(url);
       var movies = response.data['results'] as List;
       List<SearchResult> moviesList =

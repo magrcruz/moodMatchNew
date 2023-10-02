@@ -243,6 +243,7 @@ MovieDetail copyWith({  bool? adult,
 
 }
 
+
 /// english_name : "English"
 /// iso_639_1 : "en"
 /// name : "English"

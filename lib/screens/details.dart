@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
+import 'package:mood_match/models/contentDetails.dart';
+import 'package:mood_match/controllers/recommendations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-
-class ContentDetails {
-  final String genre;
-  final String? synopsisOrArtist;
-  final List<String> platforms;
-  final String imageUrl;
-
-  ContentDetails({
-    required this.genre,
-    this.synopsisOrArtist,
-    required this.platforms,
-    required this.imageUrl,
-  });
-}
 
 class Details extends StatefulWidget {
   final num id;
@@ -36,7 +24,7 @@ class _DetailsContent extends State<Details> {
   @override
   void initState() {
     super.initState();
-    fetchContentDetails(widget.type, widget.title).then((details) {
+    fetchContentDetails(widget.id,widget.type, widget.title).then((details) {
       setState(() {
         contentDetails = details;
       });
@@ -126,7 +114,7 @@ Widget _buildImageCard(String imageUrl) {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator(); // Puedes mostrar un indicador de carga mientras se verifica la existencia de la imagen.
-          } else if (snapshot.hasError || snapshot.data == null || !(snapshot.data?? false) ){
+          } else if (snapshot.hasError || !snapshot.hasData){
             // Si hay un error, si snapshot.data es nulo o si la imagen no existe en la red, muestra una imagen predeterminada.
             return Image.asset(
               'assets/images/defaultMovie.png',
@@ -150,18 +138,27 @@ Widget _buildImageCard(String imageUrl) {
 }
 
 
-  Future<ContentDetails> fetchContentDetails(String? type, String? title) async {
-    // Tu lógica para obtener los detalles del contenido desde el backend
-    // ...
-    // Ejemplo simulado con datos estáticos
-    await Future.delayed(Duration(seconds: 2));
+  Future<ContentDetails> fetchContentDetails(num id, String? type, String? title) async {
+
+    try {
+    // Llama a extractContentDetailsFromMovie para obtener los detalles del contenido.
+    final ContentDetails contentDetails = await extractContentDetailsFromMovie(id);
+    // Realiza cualquier procesamiento adicional si es necesario.
+
+    return contentDetails;
+  } catch (error) {
+    // Manejar errores aquí
     return ContentDetails(
-      genre: 'Fantasía',
-      synopsisOrArtist: 'Una emocionante historia de aventuras.',
-      platforms: ['Netflix', 'Amazon Prime', 'Hulu'],
-      imageUrl: ' ',
+      genre: 'No se consiguio extraer la informacion',
+      synopsisOrArtist: 'No se consiguio extraer la informacion',
+      platforms: ['No se consiguio extraer la informacion'],
+      imageUrl: '',
     );
   }
+  }
+
+
+  
 }
 
 

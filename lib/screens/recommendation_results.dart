@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'package:mood_match/controllers/recommendations.dart';
-import 'package:mood_match/models/SearchResult.dart';
+import 'package:mood_match/Models/SearchResult.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'details.dart';

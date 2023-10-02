@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:mood_match/Services/API.dart'; // Reemplaza esto con el nombre de tu servicio de API
-import 'package:mood_match/models/SearchResult.dart'; // Asegúrate de importar tus modelos correctamente
 import 'package:mood_match/controllers/genresClassification.dart';
+import 'package:mood_match/models/contentDetails.dart';
+
+import 'package:mood_match/Models/SearchResult.dart'; 
+import 'package:mood_match/Models/MovieDetail.dart';
+
 
 Map<String, String> label_meaning = {
     'LABEL_0': 'sadness',
@@ -56,6 +60,22 @@ Future<double> calculateSentiment(SearchResult result) async {
   return 0.7; // Valor de ejemplo, reemplázalo con la lógica real
 }
 
+
+
+Future<ContentDetails> extractContentDetailsFromMovie(num movieId) async {
+  // Obtiene los detalles de la película.
+  final apiService = APIService();
+  final MovieDetail movieDetail = await apiService.getMovieDetail(movieId.toString());
+  List<String> platforms = ["Work in progress"];
+
+  // Extrae los detalles del contenido.
+  final ContentDetails contentDetails = ContentDetails(
+    genre: movieDetail.genres?.map((v) => v.name).join(', ') ?? '',
+    synopsisOrArtist: movieDetail.overview,
+    platforms: platforms,//movieDetail.platforms,
+    imageUrl: 'http://image.tmdb.org/t/p/w500' + (movieDetail.backdropPath ?? ''));
+  return contentDetails;
+}
 
 /*
 Future<String> check_sentiment(String? inputText) async {
