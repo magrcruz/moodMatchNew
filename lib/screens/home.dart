@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_match/models/SingletonUser.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/user_profile.dart';
 import 'package:mood_match/controllers/emotionClasification.dart';
@@ -8,10 +9,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userImageURL = user?.photoURL ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
+
+    String userImageURL = UserSingleton().profileImageUrl ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
 
     UserProfile currentUser = UserProfile(
-      username: user?.displayName ?? "Usuario",
+      username: UserSingleton().username ?? "Usuario",
       profileImageURL: userImageURL, // Asigna la URL de la imagen
       isPremium: true,
       name: 'namesito',

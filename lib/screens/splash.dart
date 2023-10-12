@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
+import '../Services/firestore_manager.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -22,9 +24,14 @@ class _SplashScreenState extends State<SplashScreen> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.pushReplacementNamed(context, '/home');
+      await fetchAndSetUserData(user.uid);
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } else {
-      Navigator.pushReplacementNamed(context, '/google_auth');
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/google_auth');
+      }
     }
   }
 
@@ -34,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // Bloquea la acción de retroceso
       onWillPop: () async => false,
       child: Scaffold(
-          backgroundColor:Color(0xFFBF2828),
+        backgroundColor: Color(0xFFBF2828),
         body: Center(
           child: Stack(
             alignment: Alignment.center,
