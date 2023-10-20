@@ -1,193 +1,146 @@
 import 'package:flutter/material.dart';
-import 'package:mood_match/widgets/genre_title.dart';
-import 'package:mood_match/main.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mood_match/models/SingletonUser.dart';
+
+import '../Services/firestore_manager.dart';
+import '../models/SongGenres.dart';
 
 class GenremusicPreferences extends StatefulWidget {
   @override
-  _GenrePreferencesState createState() => _GenrePreferencesState();
+  _GenremusicPreferencesState createState() => _GenremusicPreferencesState();
 }
 
-class _GenrePreferencesState extends State<GenremusicPreferences> {
-  List<String> allGenres = [
-    'Pop',
-    'Rock',
-    'Hip Hop',
-    'Jazz',
-    'Electronic',
-    'Classical',
-    'Country',
-    'R&B',
-    'Reggae',
-    // Agrega más géneros según tus necesidades
-  ];
+class _GenremusicPreferencesState extends State<GenremusicPreferences> {
+  List<SongGenres> songGenresList = [];
+  List<SongGenres> filteredGenres = [];
+  Set<int> selectedGenres = Set<int>(); // Conjunto de géneros seleccionados
+  bool isLoading = true;
 
-  List<String> selectedGenresMusic = [];
+  @override
+  void initState() {
+    super.initState();
+    getSongGenresFirebase().then((genres) {
+      setState(() {
+        songGenresList = genres;
+        filteredGenres = genres;
+        isLoading = false;
+      });
+    });
+  }
 
-  TextEditingController searchController = TextEditingController();
+  void _filterGenres(String query) {
+    if (!isLoading) {
+      setState(() {
+        filteredGenres = songGenresList
+            .where((genre) =>
+                genre.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
+  void _toggleGenreSelection(int pk) {
+    setState(() {
+      if (selectedGenres.contains(pk)) {
+        selectedGenres.remove(pk); // Desseleccionar el género.
+      } else {
+        selectedGenres.add(pk); // Seleccionar el género.
+      }
+    });
+  }
+
+  void _printSelectedGenres() {
+    List<dynamic> genres = List.generate(42, (index) => false);
+    for (int i in selectedGenres) {
+      genres[i] = true;
+    }
+    UserSingleton().songGenres = genres;
+    print(UserSingleton().songGenres);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preferencias'),
+        title: Text('Géneros de Canciones'),
       ),
       body: Column(
-        children: <Widget>[
-          const ListTile(
-            title: Text(
-              'Géneros de Música',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
+        children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: TextField(
-              controller: searchController,
-              onChanged: (query) => filterGenres(query),
-              decoration: InputDecoration(
-                labelText: 'Buscar género',
-                hintText: 'Escribe aquí...',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear), // Icono para borrar el texto
-                  onPressed: () {
-                    searchController.clear(); // Borra el texto de búsqueda
-                    // Restablece la lista de géneros a su estado original
-                    setState(() {
-                      allGenres = [
-                        'Pop',
-                        'Rock',
-                        'Hip Hop',
-                        'Jazz',
-                        'Electronic',
-                        'Classical',
-                        'Country',
-                        'R&B',
-                        'Reggae',
-                        // Agrega más géneros según tus necesidades
-                      ];
-                    });
-                  },
-                ),
+              onChanged: _filterGenres,
+              decoration: const InputDecoration(
+                labelText: 'Buscar géneros',
+                prefixIcon: Icon(Icons.search),
               ),
             ),
           ),
           Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // Tres columnas
-                    childAspectRatio: 1.2, // Asegura que los elementos tengan una relación de aspecto adecuada
-                  ),
-                  itemCount: allGenres.length,
-                  itemBuilder: (context, index) {
-                    final genre = allGenres[index];
-                    return GestureDetector(
-                      onTap: () => toggleGenreSelection(genre),
-                      child: Card(
-                        color: selectedGenresMusic.contains(genre) ? MyApp.customSwatch : Colors.white,
-                        elevation: 3, // Sombra de la tarjeta
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // Bordes redondeados de la tarjeta
-                          side: BorderSide(
-                            color: selectedGenresMusic.contains(genre) ? Colors.transparent : Colors.grey[300]!,
-                            width: 1, // Ancho del borde de la tarjeta
-                          ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : filteredGenres.isEmpty
+                    ? const Center(child: Text('No se encontraron resultados'))
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 10.0,
                         ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            // Icono de nota musical
-                            Icon(
-                              Icons.music_note,
-                              color: selectedGenresMusic.contains(genre) ? Colors.white : Colors.black,
-                              size: 40, // Tamaño del icono de nota musical
-                            ),
-                            // Texto del género
-                            Positioned(
-                              bottom: 10, // Ajusta la posición vertical del texto
-                              child: Text(
-                                genre,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: selectedGenresMusic.contains(genre) ? Colors.white : Colors.black,
-                                  fontWeight: selectedGenresMusic.contains(genre) ? FontWeight.bold : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        itemCount: filteredGenres.length,
+                        itemBuilder: (context, index) {
+                          final genre = filteredGenres[index];
+                          final isSelected = selectedGenres.contains(genre.pk);
+                          return InkWell(
+                            onTap: () {
+                              _toggleGenreSelection(genre.pk);
+                            },
+                            child: GenreCard(genre, isSelected),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextButton(
-              onPressed: () {
-                // Mostrar el número de géneros seleccionados
-                final count = selectedGenresMusic.length;
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('Géneros seleccionados ($count)', textAlign: TextAlign.center,),
-                      content: Text(selectedGenresMusic.join(', ')),
-                      actions: [
-                        TextButton(
-                          child: const Text('Siguiente'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.pushNamed(context, '/genremoviesseries_preferences');
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Seleccionar (${selectedGenresMusic.length})'),
-              style: TextButton.styleFrom(
-                backgroundColor: MyApp.customSwatch,
-                primary: Colors.white,
-              ),
-            ),
+          ElevatedButton(
+            onPressed: _printSelectedGenres,
+            child: const Text('Siguiente'),
           ),
         ],
       ),
     );
   }
+}
 
-  void filterGenres(String query) {
-    setState(() {
-      allGenres = [
-        'Pop',
-        'Rock',
-        'Hip Hop',
-        'Jazz',
-        'Electronic',
-        'Classical',
-        'Country',
-        'R&B',
-        'Reggae',
-        // Agrega más géneros según tus necesidades
-      ].where((genre) => genre.toLowerCase().contains(query.toLowerCase())).toList();
-    });
-  }
+class GenreCard extends StatelessWidget {
+  final SongGenres genre;
+  final bool isSelected;
 
-  void toggleGenreSelection(String genre) {
-    setState(() {
-      if (selectedGenresMusic.contains(genre)) {
-        selectedGenresMusic.remove(genre);
-      } else {
-        selectedGenresMusic.add(genre);
-      }
-    });
+  GenreCard(this.genre, this.isSelected);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3, // Aumenta la elevación si está seleccionado
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      color: isSelected ? Color(0xFFFF6F6F) : null,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 10.0),
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: NetworkImage(genre.image),
+          ),
+          const SizedBox(height: 5.0),
+          Text(
+            genre.name,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ), // Cambia el color de fondo si está seleccionado
+    );
   }
 }

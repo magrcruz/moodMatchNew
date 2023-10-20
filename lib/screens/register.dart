@@ -5,6 +5,7 @@ import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../Services/firestore_manager.dart';
+import '../models/SingletonUser.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _lastNameController,
                 decoration: const InputDecoration(labelText: 'Apellido'),
@@ -51,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: dateController, //editing controller of this TextField
                 decoration: const InputDecoration(
@@ -78,11 +79,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await registerUser();
+                    saveRegister();
+                    uploadUserData();
                     if (context.mounted) {
                       Navigator.pushReplacementNamed(context, '/genremusic_preferences');
                     }
@@ -97,27 +99,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Future<void> registerUser() async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        final userData = {
-          'name': _nameController.text,
-          'last_name': _lastNameController.text,
-          'age': Timestamp.fromDate(_selectedDate),
-          // Guarda la fecha como Timestamp
-        };
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update(userData);
-
-        await fetchAndSetUserData(user.uid);
-      }
-    } catch (error) {
-      print('Error al registrar el usuario: $error');
-    }
+  void saveRegister(){
+    UserSingleton().name = _nameController.text;
+    UserSingleton().lastName = _lastNameController.text;
+    UserSingleton().birthdate = Timestamp.fromDate(_selectedDate);
   }
 }

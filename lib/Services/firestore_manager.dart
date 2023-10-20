@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/SingletonUser.dart';
+import '../models/SongGenres.dart';
 
 Future<bool> checkIfUserIsRegistered(String uid) async {
   try {
@@ -15,20 +16,12 @@ Future<bool> checkIfUserIsRegistered(String uid) async {
   }
 }
 
-Future<void> savePreRegister(String username, String urlProfileImage) async {
+Future<void> uploadUserData() async {
   try {
     final User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      final userData = {
-        'username': username,
-        'profile_image': urlProfileImage,
-        'email': user.email,
-        'name': '',
-        'last_name': '',
-        'age': 0,
-        'premium':false
-      };
+      Map<String, Object> userData = UserSingleton().getUserData();
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -36,22 +29,27 @@ Future<void> savePreRegister(String username, String urlProfileImage) async {
           .set(userData);
     }
   } catch (error) {
+    UserSingleton().logOutUser();
     print('Error al registrar el usuario: $error');
   }
 }
 
 Future<void> fetchAndSetUserData(String uid) async {
-  DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .get();
-  print(userSnapshot);
-  UserSingleton userSingleton = UserSingleton();
-  userSingleton.username = userSnapshot['username'];
-  userSingleton.profileImageUrl = userSnapshot['profile_image'];
-  userSingleton.isPremium = userSnapshot['premium'];
-  // userSingleton.isPremium = userSnapshot['isPremium'];
-  // // Asumiendo que songGenres es un array de booleanos almacenado en Firestore
-  // List<dynamic> songGenres = userSnapshot['songGenres'];
-  // userSingleton.songGenres = songGenres.cast<bool>();
+  DocumentSnapshot userSnapshot =
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  Map<String, dynamic> data = userSnapshot.data() as Map<String, dynamic>;
+  UserSingleton().logInUser(data);
+}
+
+Future<List<SongGenres>> getSongGenresFirebase() async {
+  QuerySnapshot musicSnapshot =
+  await FirebaseFirestore.instance.collection('song_gens').get();
+
+  List<SongGenres> songGenresList = [];
+  for (var document in musicSnapshot.docs) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    SongGenres songGen = SongGenres.fromMap(data);
+    songGenresList.add(songGen);
+  }
+  return songGenresList;
 }

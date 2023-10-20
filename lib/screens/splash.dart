@@ -20,25 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  void checkUserSession() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      await fetchAndSetUserData(user.uid);
-      if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/home');
-      }
-    } else {
-      if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/google_auth');
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      // Bloquea la acción de retroceso
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Color(0xFFBF2828),
@@ -57,5 +41,20 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  void checkUserSession() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      await fetchAndSetUserData(user.uid);
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } else {
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/google_auth');
+      }
+    }
   }
 }

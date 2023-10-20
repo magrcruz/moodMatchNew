@@ -8,9 +8,8 @@ class GoogleAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustomAppBar(),
+      appBar: AppBar(
+        title: Text('MOOD MATCH'),
       ),
       body: Center(
         child: Column(
@@ -19,22 +18,22 @@ class GoogleAuth extends StatelessWidget {
             // Logo de Mood Match y texto
             Column(
               children: <Widget>[
-                Text(
+                const Text(
                   'Inicia Sesión ',
                   style: TextStyle(fontSize: 30),
                 ),
-                SizedBox(height: 5), // Espacio entre el texto y el logo ,
-                Text(
+                const SizedBox(height: 5),
+                const Text(
                   'con Google',
                   style: TextStyle(fontSize: 20),
                 ),
-                SizedBox(height: 16), // Espacio entre el texto y el logo ,
+                const SizedBox(height: 16),
                 const CircleAvatar(
                   backgroundImage: AssetImage('assets/images/logo.png'),
                   //NetworkImage(currentUser.profileImageURL),
                   radius: 100,
                 ),
-                SizedBox(height: 16), // Espacio entre el texto y el logo ,
+                const SizedBox(height: 16),
                 Text(
                   'Sintonizando tus emociones',
                   style: GoogleFonts.shadowsIntoLight(
@@ -50,7 +49,7 @@ class GoogleAuth extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Botón de inicio de sesión de Google
             ElevatedButton.icon(
