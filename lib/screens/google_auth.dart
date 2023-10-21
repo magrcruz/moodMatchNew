@@ -59,6 +59,7 @@ class GoogleAuth extends StatelessWidget {
                 if (uid != null) {
                   bool isUserRegistered = await checkIfUserIsRegistered(uid);
                   if (isUserRegistered) {
+                    await fetchAndSetUserData(uid);
                     if (context.mounted) {
                       Navigator.pushReplacementNamed(context, '/home');
                     }
