@@ -73,7 +73,7 @@ Future<ContentDetails> extractContentDetailsFromMovie(num movieId) async {
     genre: movieDetail.genres?.map((v) => v.name).join(', ') ?? '',
     synopsisOrArtist: movieDetail.overview,
     platforms: platforms,//movieDetail.platforms,
-    imageUrl: 'http://image.tmdb.org/t/p/w500' + (movieDetail.backdropPath ?? ''));
+    imageUrl: 'https://image.tmdb.org/t/p/w500' + (movieDetail.backdropPath ?? ''));
   return contentDetails;
 }
 

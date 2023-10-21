@@ -6,6 +6,7 @@ import 'package:mood_match/controllers/recommendations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:mood_match/main.dart';
 
 class Details extends StatefulWidget {
   final num id;
@@ -173,6 +174,9 @@ class LikeDislikeWidget extends StatefulWidget {
 }
 
 class _LikeDislikeWidgetState extends State<LikeDislikeWidget> {
+  bool isLiked = false;
+  bool isDisliked = false;
+
   void _addPreference(String type, bool liked) {
     final preferencesCollection = FirebaseFirestore.instance.collection('preferences');
     final userUid = FirebaseAuth.instance.currentUser!.uid;
@@ -194,18 +198,33 @@ class _LikeDislikeWidgetState extends State<LikeDislikeWidget> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(Icons.thumb_up),
+          icon: Icon(
+            Icons.thumb_up,
+            color: isLiked ? MyApp.customSwatch : Colors.grey, // Cambia el color cuando es seleccionado
+          ),
           onPressed: () {
-            _addPreference('pelicula', true);
+            setState(() {
+              isLiked = true; // Marca como seleccionado
+              isDisliked = false; // Desmarca el botón "no gustar"
+              _addPreference('pelicula', true);
+            });
           },
         ),
         IconButton(
-          icon: Icon(Icons.thumb_down),
+          icon: Icon(
+            Icons.thumb_down,
+            color: isDisliked ? MyApp.customSwatch : Colors.grey, // Cambia el color cuando es seleccionado
+          ),
           onPressed: () {
-            _addPreference('pelicula', false);
+            setState(() {
+              isDisliked = true; // Marca como seleccionado
+              isLiked = false; // Desmarca el botón "gustar"
+              _addPreference('pelicula', false);
+            });
           },
         ),
       ],
     );
   }
 }
+
