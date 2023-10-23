@@ -14,6 +14,7 @@ import 'package:mood_match/screens/google_auth.dart';
 import 'package:mood_match/screens/details.dart';
 import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
 import 'package:mood_match/models/user_profile.dart';
+import 'package:mood_match/Models/MovieSerie.dart';
 
 
 import '../screens/logout.dart';
@@ -21,6 +22,15 @@ import '../screens/pre_register.dart';
 import '../screens/register.dart';
 import '../screens/splash.dart';
 import '../screens/splash2.dart';
+
+MovieSerie dummyMovieSerie = MovieSerie(
+      tconst : 'tconst',
+      sinopsis: 'Sinopsis',
+      emocion: 'emocion',
+      genres: [1,2,3],
+      primaryTitle: 'primaryTitle',
+      titleType: 'titleType',
+    );
 
 UserProfile dummyUser = UserProfile(
     username: 'Pantalon para tiendas',
@@ -49,6 +59,6 @@ final Map<String, WidgetBuilder> routes = {
   '/splash2':(context) => SplashScreen2(),
   '/google_auth':(context) => GoogleAuth(),
   '/signout':(context) => signOutPage(),
-  '/details':(context) => Details(id: 0000)
+  '/details':(context) => Details(content: dummyMovieSerie)
 
 };

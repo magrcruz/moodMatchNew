@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_match/controllers/genresClasification.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/contentDetails.dart';
@@ -7,13 +8,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:mood_match/main.dart';
+import 'package:mood_match/Models/MovieSerie.dart';
 
 class Details extends StatefulWidget {
-  final num id;
+  final MovieSerie content;
+  final String? id;
   final String? type;
   final String? title;
 
-  Details({required this.id,this.type, this.title});
+  Details({required this.content,this.id,this.type, this.title});
 
   @override
   _DetailsContent createState() => _DetailsContent();
@@ -25,7 +28,7 @@ class _DetailsContent extends State<Details> {
   @override
   void initState() {
     super.initState();
-    fetchContentDetails(widget.id,widget.type, widget.title).then((details) {
+    fetchContentDetails(widget.content).then((details) {
       setState(() {
         contentDetails = details;
       });
@@ -139,23 +142,31 @@ Widget _buildImageCard(String imageUrl) {
 }
 
 
-  Future<ContentDetails> fetchContentDetails(num id, String? type, String? title) async {
-
+  Future<ContentDetails> fetchContentDetails(MovieSerie? content) async {
+    /*
     try {
-    // Llama a extractContentDetailsFromMovie para obtener los detalles del contenido.
-    final ContentDetails contentDetails = await extractContentDetailsFromMovie(id);
-    // Realiza cualquier procesamiento adicional si es necesario.
+      // Llama a extractContentDetailsFromMovie para obtener los detalles del contenido.
+      //final ContentDetails contentDetails = await extractContentDetailsFromMovie(id);
+      // Realiza cualquier procesamiento adicional si es necesario.
 
-    return contentDetails;
-  } catch (error) {
-    // Manejar errores aquí
+      //return contentDetails;
+    } catch (error) {
+      // Manejar errores aquí
+      return ContentDetails(
+        genre: 'No se consiguio extraer la informacion',
+        synopsisOrArtist: 'No se consiguio extraer la informacion',
+        platforms: ['No se consiguio extraer la informacion'],
+        imageUrl: '',
+      );
+    }*/
     return ContentDetails(
-      genre: 'No se consiguio extraer la informacion',
-      synopsisOrArtist: 'No se consiguio extraer la informacion',
-      platforms: ['No se consiguio extraer la informacion'],
-      imageUrl: '',
-    );
-  }
+        genre: content!.genres.map((genreId) {
+          return genreIdToNameMap[genreId] ?? 'Desconocido';
+        }).toList().join(', '),
+        synopsisOrArtist: content.sinopsis,
+        platforms: ['Netflix'],
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/moodmatch-57ae2.appspot.com/o/defaultImages%2FdefaultMovie.png?alt=media&token=09516e2f-7862-4ade-a9f8-3c7339d56f49&_gl=1*487rno*_ga*NTI4NDgxMjk2LjE2OTU1MDI3MjU.*_ga_CW55HF8NVT*MTY5ODAzMzc4NS4xOS4xLjE2OTgwMzQxNzQuMzQuMC4w',
+      );
   }
 
 

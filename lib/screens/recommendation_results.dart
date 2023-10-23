@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'package:mood_match/controllers/recommendations.dart';
-import 'package:mood_match/Models/SearchResult.dart';
+import 'package:mood_match/Models/MovieSerie.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'details.dart';
@@ -32,7 +32,7 @@ class RecommendationResults extends StatefulWidget {
 }
 
 class _RecommendationResultsState extends State<RecommendationResults> {
-  List<SearchResult>? _recommendations;
+  List<MovieSerie>? _recommendations;
 
   @override
   void initState() {
@@ -42,9 +42,9 @@ class _RecommendationResultsState extends State<RecommendationResults> {
 
   Future<void> _loadRecommendations() async {
     try {
-      final recommendations = await getRecommended(widget.type ?? '', widget.selectedEmotion ?? '');
+      final recommendations = await getRandomMoviesSeries(widget.type ?? '', widget.selectedEmotion ?? '');
       setState(() {
-        _recommendations = recommendations as List<SearchResult>;
+        _recommendations = recommendations as List<MovieSerie>;
       });
     } catch (error) {
       print('Error loading recommendations: $error');
@@ -141,17 +141,18 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                             child: Text('${index + 1}', style: TextStyle(color: Colors.white)),
                           ),
                           title: Text(
-                            _recommendations![index].originalTitle ?? 'Título no disponible',
+                            _recommendations![index].primaryTitle ?? 'Título no disponible',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           trailing: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () {                            
                               final contentSelected = Details(
-                                id: _recommendations![index].id!,
+                                content: _recommendations![index],
+                                id: _recommendations![index].tconst,
                                 type: widget.type, // Reemplaza 'type' con el valor adecuado
-                                title: _recommendations![index].originalTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
+                                title: _recommendations![index].primaryTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
                               );
-
+                              print(widget.type);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

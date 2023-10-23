@@ -45,6 +45,8 @@ app.*.map.json
 
 # google services
 /android/app/google-services.json
+/uploadMovies/google-services.json
+/uploadMovies/moodmatch-57ae2-firebase-adminsdk-tsqlj-d55ccb4b52.json
 
 /lib/Services/key.dart
 
