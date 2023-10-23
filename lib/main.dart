@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      initialRoute: '/genremusic_preferences', // Establece la ruta inicial en '/index'
+      initialRoute: '/splash', // Establece la ruta inicial en '/index'
       routes: routes, // Utiliza las rutas definidas en routes.dart
     );
   }

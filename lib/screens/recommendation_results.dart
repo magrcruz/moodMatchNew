@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
-import 'package:mood_match/controllers/recommendations.dart';
-import 'package:mood_match/models/SearchResult.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
-import 'details.dart';
-class RecommendationResults extends StatefulWidget {
+import '../Services/firestore_manager.dart';
+import '../models/Song.dart';
+
+class SongRecommendationResults extends StatefulWidget {
   final String? type;
   final String? selectedEmotion;
 
-  RecommendationResults({
+  const SongRecommendationResults({super.key,
     this.type,
     this.selectedEmotion,
   });
@@ -28,11 +28,11 @@ class RecommendationResults extends StatefulWidget {
   };
 
   @override
-  _RecommendationResultsState createState() => _RecommendationResultsState();
+  State<SongRecommendationResults> createState() => _SongRecommendationResultsState();
 }
 
-class _RecommendationResultsState extends State<RecommendationResults> {
-  List<SearchResult>? _recommendations;
+class _SongRecommendationResultsState extends State<SongRecommendationResults> {
+  List<Song>? _recommendations;
 
   @override
   void initState() {
@@ -42,9 +42,15 @@ class _RecommendationResultsState extends State<RecommendationResults> {
 
   Future<void> _loadRecommendations() async {
     try {
-      final recommendations = await getRecommended(widget.type ?? '', widget.selectedEmotion ?? '');
+      final Map<String, int> emotionsIdMap = {
+        'joy': 1,
+        'sadness': 2,
+        'anger': 3,
+        'surprise': 4,
+      };
+      List<Song> recommendations = await getSongsWithEmotion(emotionsIdMap[widget.selectedEmotion]!);
       setState(() {
-        _recommendations = recommendations as List<SearchResult>;
+        _recommendations = recommendations;
       });
     } catch (error) {
       print('Error loading recommendations: $error');
@@ -55,9 +61,13 @@ class _RecommendationResultsState extends State<RecommendationResults> {
 
   @override
   Widget build(BuildContext context) {
-    String typeText = RecommendationResults.typeMap[widget.type] ?? widget.type ?? 'Desconocido';
+    String typeText = SongRecommendationResults.typeMap[widget.type] ??
+        widget.type ??
+        'Desconocido';
     String emotionText =
-        RecommendationResults.emotionMap[widget.selectedEmotion] ?? widget.selectedEmotion ?? 'Desconocido';
+        SongRecommendationResults.emotionMap[widget.selectedEmotion] ??
+            widget.selectedEmotion ??
+            'Desconocido';
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -66,8 +76,8 @@ class _RecommendationResultsState extends State<RecommendationResults> {
       body: Center(
         child: Column(
           children: <Widget>[
-            SizedBox(height: 50),
-            Text(
+            const SizedBox(height: 50),
+            const Text(
               'Recomendaciones para ti',
               style: TextStyle(fontSize: 20),
             ),
@@ -86,12 +96,13 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Contenido',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '$typeText',
+                          typeText,
                           style: const TextStyle(fontSize: 20),
                         ),
                       ],
@@ -109,12 +120,13 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Emoción',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '$emotionText',
+                          emotionText,
                           style: const TextStyle(fontSize: 20),
                         ),
                       ],
@@ -123,51 +135,55 @@ class _RecommendationResultsState extends State<RecommendationResults> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_recommendations == null)
               CustomLoader()
             else if (_recommendations!.isEmpty)
-              Text('No se encontraron resultados.')
+              const Text('No se encontraron resultados.')
             else
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (int index = 0; index < _recommendations!.length; index++)
+                      for (int index = 0;
+                          index < _recommendations!.length;
+                          index++)
                         ListTile(
-                          contentPadding: EdgeInsets.all(16),
+                          contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
                             backgroundColor: MyApp.customSwatch,
-                            child: Text('${index + 1}', style: TextStyle(color: Colors.white)),
+                            child: Text('${index + 1}',
+                                style: const TextStyle(color: Colors.white)),
                           ),
                           title: Text(
-                            _recommendations![index].originalTitle ?? 'Título no disponible',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            _recommendations![index].title,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              final contentSelected = Details(
-                                id: _recommendations![index].id!,
-                                type: widget.type, // Reemplaza 'type' con el valor adecuado
-                                title: _recommendations![index].originalTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
-                              );
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => contentSelected,
-                                ),
-                              );
-                            },
-                            child: Text('Detalles', style: TextStyle(fontSize: 14)),
-                            style: ElevatedButton.styleFrom(
-                              primary: MyApp.customSwatch,
-                              onPrimary: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-
-                          },
+                          // trailing: ElevatedButton(
+                          //   onPressed: () {
+                          //     final contentSelected = Details(
+                          //       id: _recommendations![index].id!,
+                          //       type: widget.type,
+                          //       // Reemplaza 'type' con el valor adecuado
+                          //       title: _recommendations![index]
+                          //           .originalTitle, // Reemplaza 'selectedEmotion' con el valor adecuado
+                          //     );
+                          //
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => contentSelected,
+                          //       ),
+                          //     );
+                          //   },
+                          //   child: Text('Detalles',
+                          //       style: TextStyle(fontSize: 14)),
+                          //   style: ElevatedButton.styleFrom(
+                          //     primary: MyApp.customSwatch,
+                          //     onPrimary: Colors.white,
+                          //   ),
+                          // ),
+                          onTap: () {},
                         ),
                     ],
                   ),
@@ -179,4 +195,3 @@ class _RecommendationResultsState extends State<RecommendationResults> {
     );
   }
 }
-

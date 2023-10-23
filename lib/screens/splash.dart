@@ -7,8 +7,10 @@ import 'package:lottie/lottie.dart';
 import '../Services/firestore_manager.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -25,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Color(0xFFBF2828),
+        backgroundColor: const Color(0xFFBF2828),
         body: Center(
           child: Stack(
             alignment: Alignment.center,
@@ -53,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     } else {
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/google_auth');
+        Navigator.pushReplacementNamed(context, '/login_google');
       }
     }
   }

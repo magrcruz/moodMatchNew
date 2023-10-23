@@ -8,8 +8,10 @@ import '../services/cloud_storage_manager.dart';
 import '../services/select_image.dart';
 
 class PreRegisterScreen extends StatefulWidget {
+  const PreRegisterScreen({super.key});
+
   @override
-  _PreRegisterScreenState createState() => _PreRegisterScreenState();
+  State<PreRegisterScreen> createState() => _PreRegisterScreenState();
 }
 
 class _PreRegisterScreenState extends State<PreRegisterScreen> {
@@ -59,7 +61,8 @@ class _PreRegisterScreenState extends State<PreRegisterScreen> {
                       await uploadProfileImage(profileImage!, user!.uid);
                 }
 
-                savePreRegister(_nameController.text, urlProfileImage, user!.email!);
+                savePreRegister(
+                    _nameController.text, urlProfileImage, user!.email!);
                 if (context.mounted) {
                   Navigator.pushReplacementNamed(context, '/register');
                 }

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Services/firestore_manager.dart';
 import '../Services/login_google.dart';
-class GoogleAuth extends StatelessWidget {
+
+class LoginGoogle extends StatelessWidget {
+  const LoginGoogle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MOOD MATCH'),
+        title: const Text('MOOD MATCH'),
       ),
       body: Center(
         child: Column(
@@ -19,7 +21,7 @@ class GoogleAuth extends StatelessWidget {
             Column(
               children: <Widget>[
                 const Text(
-                  'Inicia Sesión ',
+                  'Inicia Sesión',
                   style: TextStyle(fontSize: 30),
                 ),
                 const SizedBox(height: 5),
@@ -37,10 +39,7 @@ class GoogleAuth extends StatelessWidget {
                 Text(
                   'Sintonizando tus emociones',
                   style: GoogleFonts.shadowsIntoLight(
-                    textStyle: Theme
-                        .of(context)
-                        .textTheme
-                        .displayLarge,
+                    textStyle: Theme.of(context).textTheme.displayLarge,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.italic,
@@ -73,22 +72,19 @@ class GoogleAuth extends StatelessWidget {
               },
               icon: Image.asset(
                 'assets/images/google_logo.png',
-                // Ruta de la imagen del logo de Google
-                width: 24, // Ajusta el ancho según tus necesidades
-                height: 24, // Ajusta la altura según tus necesidades
+                width: 24,
+                height: 24,
               ),
-              label: Text('Iniciar sesión con Google'),
+              label: const Text('Iniciar sesión con Google'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.white, // Color de fondo blanco
-                onPrimary: Colors.black, // Color del texto negro
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  // Ajusta el radio de borde según tus necesidades
-                  side: BorderSide(color: Colors.black), // Borde negro
+                  side: const BorderSide(color: Colors.black),
                 ),
               ),
             ),
-
           ],
         ),
       ),

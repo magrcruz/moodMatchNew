@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'recommendation_results.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
+
 class ChooseEmotion extends StatefulWidget {
+  const ChooseEmotion({super.key});
+
   @override
-  _ChooseEmotionState createState() => _ChooseEmotionState();
+  State<ChooseEmotion> createState() => _ChooseEmotionState();
 }
 
 class _ChooseEmotionState extends State<ChooseEmotion> {
@@ -24,7 +27,8 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
     super.didChangeDependencies();
 
     // Obtener los argumentos pasados desde la pantalla anterior
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
     // Verificar si 'type' existe en los argumentos
     if (args != null && args.containsKey('type')) {
@@ -41,15 +45,17 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 120), // Espacio encima de la cuadrícula de botones
-          Text(
+          const SizedBox(height: 120),
+          // Espacio encima de la cuadrícula de botones
+          const Text(
             '¿Cómo te sientes hoy?',
             style: TextStyle(fontSize: 30),
           ),
-          SizedBox(height: 30), // Espacio encima de la cuadrícula de botones
+          const SizedBox(height: 30),
+          // Espacio encima de la cuadrícula de botones
           Expanded(
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemCount: emotionsMap.length,
@@ -57,7 +63,7 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
                 final emotion = emotionsMap.keys.elementAt(index);
                 final spanishEmotion = emotionsMap[emotion]!;
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     setState(() {
                       selectedEmotion = emotion;
                     });
@@ -66,10 +72,12 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
                     navigateToRecommendationResults();
                   },
                   child: Container(
-                    margin: EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      color: selectedEmotion == emotion ? MyApp.customSwatch[900] : MyApp.customSwatch,
+                      color: selectedEmotion == emotion
+                          ? MyApp.customSwatch[900]
+                          : MyApp.customSwatch,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -79,10 +87,10 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
                           width: 100.0,
                           height: 100.0,
                         ),
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         Text(
                           spanishEmotion,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -102,37 +110,18 @@ class _ChooseEmotionState extends State<ChooseEmotion> {
 
   // Función para navegar a la pantalla de recomendaciones
   void navigateToRecommendationResults() {
-    if (selectedEmotion.isNotEmpty) {
-      // Crear una instancia de RecommendationResults y navegar a ella
-      final recommendationResults = RecommendationResults(
-        type: type, // Reemplaza 'type' con el valor adecuado
-        selectedEmotion: selectedEmotion, // Reemplaza 'selectedEmotion' con el valor adecuado
-      );
+    // Crear una instancia de RecommendationResults y navegar a ella
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => recommendationResults,
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Por favor, selecciona una emoción.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cerrar'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    final recommendationResults = SongRecommendationResults(
+      type: type,
+      selectedEmotion: selectedEmotion,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => recommendationResults,
+      ),
+    );
   }
 }

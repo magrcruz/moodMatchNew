@@ -3,51 +3,41 @@ import 'package:mood_match/screens/index.dart';
 import 'package:mood_match/screens/choose_emotion.dart';
 import 'package:mood_match/screens/recommendation_results.dart';
 import 'package:mood_match/screens/choose_content.dart';
-import 'package:mood_match/screens/genremusic_preferences.dart';
+import 'package:mood_match/screens/song_genres_preferences.dart';
 import 'package:mood_match/screens/genremoviesseries_preferences.dart';
-import 'package:mood_match/screens/platforms_preferences.dart';
+import 'package:mood_match/screens/song_platforms_preferences.dart';
 import 'package:mood_match/screens/show_info.dart';
 import 'package:mood_match/screens/signup.dart';
 import 'package:mood_match/screens/user_info.dart';
-import 'package:mood_match/screens/login.dart';
 import 'package:mood_match/screens/google_auth.dart';
 import 'package:mood_match/screens/details.dart';
-import 'package:mood_match/screens/home.dart'; // Asegúrate de importar la clase HomeScreen
-import 'package:mood_match/models/user_profile.dart';
-
-
+import 'package:mood_match/screens/home.dart';
 import '../screens/logout.dart';
 import '../screens/pre_register.dart';
 import '../screens/register.dart';
 import '../screens/splash.dart';
-import '../screens/splash2.dart';
-
-UserProfile dummyUser = UserProfile(
-    username: 'Pantalon para tiendas',
-    profileImageURL: 'https://images.milenio.com/PBYshjJo2dc007elHCdKpZdoqW8=/375x0/uploads/media/2023/08/31/pantalon-para-tiendas.jpeg',//Dejo de funcionar, se vencio el link
-    isPremium: true,
-    name: 'namesito'
-);
 
 final Map<String, WidgetBuilder> routes = {
-  // '/': (context) => HomeScreen(), // Ruta de inicio
-  '/home': (context) => HomeScreen(), // Ruta de inicio
-  '/index': (context) => Index(),
+  '/splash':(context) => const SplashScreen(),
+  '/login_google':(context) => const LoginGoogle(),
+  '/pre_register':(context) => const PreRegisterScreen(),
+  '/register':(context) => const RegisterScreen(),
+  '/song_genres_preferences': (context) => const SongGenresPreferences(),
+  '/song_platforms_preferences': (context) => const SongPlatformsPreferences(),
+
+  '/movie_genres_preferences': (context) => GenremovieseriePreferences(),
+
+  '/home': (context) => HomeScreen(),
+  '/choose_content': (context) => const ChooseContent(),
   '/choose_emotion': (context) => ChooseEmotion(),
-  '/recommendation_results': (context) => RecommendationResults(),
-  '/choose_content': (context) => ChooseContent(),
-  '/genremusic_preferences': (context) => GenremusicPreferences(),
-  '/genremoviesseries_preferences': (context) => GenremovieseriePreferences(),
-  '/platforms_preferences': (context) => PlatformsPreferences(),
+  '/index': (context) => Index(),
+
+  '/recommendation_results': (context) => SongRecommendationResults(),
+
   '/show_info': (context) => ShowInfo(),
   '/user_info': (context) => UserInfoScreen(),
-  '/login':(context) => LoginPage(),
+  // '/login':(context) => LoginPage(),
   '/signup':(context) => SignUp(),
-  '/register':(context) => RegisterScreen(),
-  '/pre_register':(context) => PreRegisterScreen(),
-  '/splash':(context) => SplashScreen(),
-  '/splash2':(context) => SplashScreen2(),
-  '/google_auth':(context) => GoogleAuth(),
   '/signout':(context) => signOutPage(),
   '/details':(context) => Details(id: 0000)
 

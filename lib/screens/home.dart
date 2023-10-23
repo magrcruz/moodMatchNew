@@ -3,27 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:mood_match/models/SingletonUser.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/user_profile.dart';
-import 'package:mood_match/controllers/emotionClasification.dart';
+
 class HomeScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
 
+  HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-
-    String userImageURL = UserSingleton().profileImageUrl ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
-
     UserProfile currentUser = UserProfile(
-      username: UserSingleton().username ?? "Usuario",
-      profileImageURL: userImageURL, // Asigna la URL de la imagen
-      isPremium: true,
-      name: 'namesito',
+      username:
+          UserSingleton().username != "" ? UserSingleton().username : "Usuario",
+      profileImageURL: UserSingleton().profileImageUrl != ""
+          ? UserSingleton().profileImageUrl
+          : 'assets/images/logo.png', // Asigna la URL de la imagen
+      isPremium: UserSingleton().premium,
+      name: UserSingleton().name,
     );
 
-    int numberOfRecommendations = 10;
-    String lastRecommendation = "The Big Bang Theory";
+    int numberOfRecommendations = 10; //Por ahora no
+    String lastRecommendation = "The Big Bang Theory"; //Por ahora no
 
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: CustomAppBar(),
       ),
@@ -31,22 +33,22 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             CircleAvatar(
-              backgroundImage: NetworkImage(userImageURL), // Carga la imagen desde la URL
+              backgroundImage: NetworkImage(currentUser.profileImageURL),
               radius: 50,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               '¡Hola!',
               style: TextStyle(fontSize: 30),
               textAlign: TextAlign.center,
             ),
             Text(
               currentUser.username,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: <Widget>[
                 Card(
@@ -59,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                     child: ListTile(
                       title: const Text(
                         'Recomendaciones',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -86,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                     child: ListTile(
                       title: const Text(
                         'Última Recomendación:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -111,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),

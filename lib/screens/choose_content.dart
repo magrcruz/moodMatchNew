@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 class ChooseContent extends StatefulWidget {
+  const ChooseContent({super.key});
+
   @override
-  _ChooseContentState createState() => _ChooseContentState();
+  State<ChooseContent> createState() => _ChooseContentState();
 }
 
 class _ChooseContentState extends State<ChooseContent> {
@@ -18,17 +20,17 @@ class _ChooseContentState extends State<ChooseContent> {
       ),
       body: ListView(
         children: <Widget>[
-          SizedBox(height: 16), // Espacio encima del primer boton
-          Text(
+          const SizedBox(height: 16), // Espacio encima del primer boton
+          const Text(
             '¿Qué tipo de contenido deseas hoy?',
             style: TextStyle(fontSize: 30),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16), // Espacio encima del primer boton
+          const SizedBox(height: 16), // Espacio encima del primer boton
           _buildContentButton('Música', 'assets/images/music.png', 'music'),
-          SizedBox(height: 16), // Espacio vertical entre botones
+          const SizedBox(height: 16), // Espacio vertical entre botones
           _buildContentButton('Películas', 'assets/images/movie.png', 'movie'),
-          SizedBox(height: 16), // Espacio vertical entre botones
+          const SizedBox(height: 16), // Espacio vertical entre botones
           _buildContentButton('Series', 'assets/images/serie.png', 'tv'),
           // Agrega más botones si es necesario
         ],
@@ -50,7 +52,7 @@ class _ChooseContentState extends State<ChooseContent> {
           _navigateToChooseEmotion(context, type);
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.transparent, // Fondo transparente
+          backgroundColor: Colors.transparent, // Fondo transparente
           elevation: 0, // Sin sombra
         ),
         child: Column(
@@ -61,10 +63,10 @@ class _ChooseContentState extends State<ChooseContent> {
               width: 80, // Ajusta el tamaño de la imagen para que sea cuadrada
               height: 80, // Ajusta el tamaño de la imagen para que sea cuadrada
             ),
-            SizedBox(height: 8), // Espacio vertical entre imagen y texto
+            const SizedBox(height: 8), // Espacio vertical entre imagen y texto
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

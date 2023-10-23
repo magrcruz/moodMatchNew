@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mood_match/models/SingletonUser.dart';
 
 import '../Services/firestore_manager.dart';
-import '../models/SongGenres.dart';
+import '../models/SongPlatforms.dart';
 
-class GenremusicPreferences extends StatefulWidget {
+class SongPlatformsPreferences extends StatefulWidget {
+  const SongPlatformsPreferences({super.key});
+
   @override
-  _GenremusicPreferencesState createState() => _GenremusicPreferencesState();
+  State<SongPlatformsPreferences> createState() =>
+      _SongPlatformsPreferencesState();
 }
 
-class _GenremusicPreferencesState extends State<GenremusicPreferences> {
-  List<SongGenres> songGenresList = [];
-  List<SongGenres> filteredGenres = [];
-  Set<int> selectedGenres = Set<int>(); // Conjunto de géneros seleccionados
+class _SongPlatformsPreferencesState extends State<SongPlatformsPreferences> {
+  List<SongPlatforms> songPlatformsList = [];
+  List<SongPlatforms> filteredPlatforms = [];
+  Set<int> selectedPlatforms = <int>{};
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getSongGenresFirebase().then((genres) {
+    getSongPlatformsFirebase().then((platforms) {
       setState(() {
-        songGenresList = genres;
-        filteredGenres = genres;
+        songPlatformsList = platforms;
+        filteredPlatforms = platforms;
         isLoading = false;
       });
     });
   }
 
-  void _filterGenres(String query) {
+  void _filterPlatforms(String query) {
     if (!isLoading) {
       setState(() {
-        filteredGenres = songGenresList
+        filteredPlatforms = songPlatformsList
             .where((genre) =>
                 genre.name.toLowerCase().contains(query.toLowerCase()))
             .toList();
@@ -40,39 +41,39 @@ class _GenremusicPreferencesState extends State<GenremusicPreferences> {
     }
   }
 
-  void _toggleGenreSelection(int pk) {
+  void _togglePlatformSelection(int pk) {
     setState(() {
-      if (selectedGenres.contains(pk)) {
-        selectedGenres.remove(pk); // Desseleccionar el género.
+      if (selectedPlatforms.contains(pk)) {
+        selectedPlatforms.remove(pk);
       } else {
-        selectedGenres.add(pk); // Seleccionar el género.
+        selectedPlatforms.add(pk);
       }
     });
   }
 
-  void _printSelectedGenres() {
-    List<dynamic> genres = List.generate(42, (index) => false);
-    for (int i in selectedGenres) {
-      genres[i] = true;
+  void saveSongPlatforms() {
+    List<dynamic> platforms =
+        List.generate(UserSingleton().songServices.length, (index) => false);
+    for (int i in selectedPlatforms) {
+      platforms[i] = true;
     }
-    UserSingleton().songGenres = genres;
-    print(UserSingleton().songGenres);
+    UserSingleton().songServices = platforms;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Géneros de Canciones'),
+        title: const Text('Plataformas de Canciones'),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
-              onChanged: _filterGenres,
+              onChanged: _filterPlatforms,
               decoration: const InputDecoration(
-                labelText: 'Buscar géneros',
+                labelText: 'Buscar plataforma',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
@@ -80,7 +81,7 @@ class _GenremusicPreferencesState extends State<GenremusicPreferences> {
           Expanded(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : filteredGenres.isEmpty
+                : filteredPlatforms.isEmpty
                     ? const Center(child: Text('No se encontraron resultados'))
                     : GridView.builder(
                         gridDelegate:
@@ -89,13 +90,14 @@ class _GenremusicPreferencesState extends State<GenremusicPreferences> {
                           crossAxisSpacing: 10.0,
                           mainAxisSpacing: 10.0,
                         ),
-                        itemCount: filteredGenres.length,
+                        itemCount: filteredPlatforms.length,
                         itemBuilder: (context, index) {
-                          final genre = filteredGenres[index];
-                          final isSelected = selectedGenres.contains(genre.pk);
+                          final genre = filteredPlatforms[index];
+                          final isSelected =
+                              selectedPlatforms.contains(genre.pk);
                           return InkWell(
                             onTap: () {
-                              _toggleGenreSelection(genre.pk);
+                              _togglePlatformSelection(genre.pk);
                             },
                             child: GenreCard(genre, isSelected),
                           );
@@ -103,7 +105,14 @@ class _GenremusicPreferencesState extends State<GenremusicPreferences> {
                       ),
           ),
           ElevatedButton(
-            onPressed: _printSelectedGenres,
+            onPressed: () {
+              saveSongPlatforms();
+              uploadUserData();
+              if (context.mounted) {
+                Navigator.pushReplacementNamed(
+                    context, '/home');
+              }
+            },
             child: const Text('Siguiente'),
           ),
         ],
@@ -113,26 +122,26 @@ class _GenremusicPreferencesState extends State<GenremusicPreferences> {
 }
 
 class GenreCard extends StatelessWidget {
-  final SongGenres genre;
+  final SongPlatforms genre;
   final bool isSelected;
 
-  GenreCard(this.genre, this.isSelected);
+  const GenreCard(this.genre, this.isSelected, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3, // Aumenta la elevación si está seleccionado
+      elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: isSelected ? Color(0xFFFF6F6F) : null,
+      color: isSelected ? const Color(0xFFFF6F6F) : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 10.0),
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage(genre.image),
+            backgroundImage: NetworkImage(genre.logo),
           ),
           const SizedBox(height: 5.0),
           Text(
@@ -140,7 +149,7 @@ class GenreCard extends StatelessWidget {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
-      ), // Cambia el color de fondo si está seleccionado
+      ),
     );
   }
 }

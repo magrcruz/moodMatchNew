@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:intl/intl.dart';
-
-import '../Services/firestore_manager.dart';
 import '../models/SingletonUser.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -54,12 +53,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: dateController, //editing controller of this TextField
+                controller: dateController,
+                //editing controller of this TextField
                 decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today), //icon of text field
                     labelText: "Enter Date" //label text of field
-                ),
-                readOnly: true,  // when true user cannot edit text
+                    ),
+                readOnly: true,
+                // when true user cannot edit text
                 onTap: () async {
                   DateTime? pickedDate = await DatePicker.showSimpleDatePicker(
                     context,
@@ -70,8 +71,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     locale: DateTimePickerLocale.en_us,
                     looping: true,
                   );
-                  if(pickedDate != null ){
-                    String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                  if (pickedDate != null) {
+                    String formattedDate =
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                     setState(() {
                       dateController.text = formattedDate;
                       _selectedDate = pickedDate;
@@ -81,12 +83,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     saveRegister();
-                    uploadUserData();
                     if (context.mounted) {
-                      Navigator.pushReplacementNamed(context, '/genremusic_preferences');
+                      Navigator.pushReplacementNamed(
+                          context, '/song_genres_preferences');
                     }
                   }
                 },
@@ -99,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void saveRegister(){
+  void saveRegister() {
     UserSingleton().name = _nameController.text;
     UserSingleton().lastName = _lastNameController.text;
     UserSingleton().birthdate = Timestamp.fromDate(_selectedDate);
