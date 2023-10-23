@@ -127,7 +127,7 @@ class _RecommendationResultsState extends State<RecommendationResults> {
             if (_recommendations == null)
               CustomLoader()
             else if (_recommendations!.isEmpty)
-              Text('No se encontraron resultados.')
+              Text('Se excedio el limite de recomendaciones del día')
             else
               Expanded(
                 child: SingleChildScrollView(

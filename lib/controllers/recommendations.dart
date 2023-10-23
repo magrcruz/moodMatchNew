@@ -10,9 +10,15 @@ import 'package:mood_match/Models/SearchResult.dart';
 import 'package:mood_match/Models/MovieDetail.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:mood_match/Models/MovieSerie.dart';
 import 'package:mood_match/controllers/genresClasification.dart';
+
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+User? user = _auth.currentUser;
+String? userUid = user?.uid;
 
 Map<String, String> label_meaning = {
     'LABEL_0': 'sadness',
@@ -141,7 +147,57 @@ Future<String> check_sentiment(String? inputText) async {
 }*/
 
 //From here
+
+Future<void> incrementarRecomendacionesHoy() async {
+  final firestore = FirebaseFirestore.instance;
+  final userDoc = firestore.collection('nRecommendations').doc(userUid);
+
+  // Obtener la fecha de hoy en formato YYYY-MM-DD
+  DateTime now = DateTime.now();
+  String formattedDate = "${now.year}-${now.month}-${now.day}";
+
+  // Incrementar el número de recomendaciones para la fecha de hoy
+  userDoc.collection('numRecomendations').doc(formattedDate).set(
+    {'valor': FieldValue.increment(1)},
+    SetOptions(merge: true),
+  );
+}
+Future<bool> noMayorQueVariable(int maxRecomendaciones) async {
+  final firestore = FirebaseFirestore.instance;
+  final userDoc = firestore.collection('nRecommendations').doc(userUid);
+
+  // Obtener la fecha de hoy en formato YYYY-MM-DD
+  DateTime now = DateTime.now();
+  String formattedDate = "${now.year}-${now.month}-${now.day}";
+
+  // Obtener el documento correspondiente a la fecha de hoy
+  final docSnapshot = await userDoc.collection('numRecomendations').doc(formattedDate).get();
+
+  if (docSnapshot.exists) {
+    final data = docSnapshot.data() as Map<String, dynamic>;
+    final recomendacionesHoy = data['valor'] ?? 0;
+
+    // Verificar si no es mayor que la variable
+    return recomendacionesHoy < maxRecomendaciones;
+  }
+
+  return true; // Devolver true si el documento no existe
+}
+
+int maxRecomendaciones = 5;
+
 Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) async {
+
+  if (await noMayorQueVariable(maxRecomendaciones)) {
+      // El número de recomendaciones es aceptable, haz algo aquí
+      incrementarRecomendacionesHoy();
+      print("Número de recomendaciones aceptable");
+  } else {
+    // El número de recomendaciones excede el límite, sal del bucle o la función
+    print("Número de recomendaciones excede el límite");
+    return []; // Esto es válido solo dentro de un bucle
+  }
+
   Map<String, String> typeMap = {
     'music': 'songs',
     'movie': 'Movies',
@@ -166,6 +222,8 @@ Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) asyn
     throw Exception("No hay suficientes datos que cumplan con los criterios.");
     //Aqui colocar que ponga de todos los generos
   }
+
+  // Add here recommendations
 
   final random = Random();
   final selectedDocuments = <DocumentSnapshot>[];
