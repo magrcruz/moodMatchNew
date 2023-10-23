@@ -159,6 +159,18 @@ Widget _buildImageCard(String imageUrl) {
         imageUrl: '',
       );
     }*/
+
+    if (content?.titleType=="songs"){
+      return ContentDetails(
+        genre: content!.genres.map((genreId) {
+          return genreMusicNameMap[genreId] ?? 'Desconocido';
+        }).toList().join(', '),
+        synopsisOrArtist: content.sinopsis,
+        platforms: ['Spotify'],
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/moodmatch-57ae2.appspot.com/o/defaultImages%2FdefaultMovie.png?alt=media&token=09516e2f-7862-4ade-a9f8-3c7339d56f49&_gl=1*487rno*_ga*NTI4NDgxMjk2LjE2OTU1MDI3MjU.*_ga_CW55HF8NVT*MTY5ODAzMzc4NS4xOS4xLjE2OTgwMzQxNzQuMzQuMC4w',
+      );
+    }
+
     return ContentDetails(
         genre: content!.genres.map((genreId) {
           return genreIdToNameMap[genreId] ?? 'Desconocido';

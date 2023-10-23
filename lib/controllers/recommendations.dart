@@ -186,7 +186,13 @@ Future<bool> noMayorQueVariable(int maxRecomendaciones) async {
 
 int maxRecomendaciones = 5;
 
+/**
+    
+*/
+
+
 Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) async {
+  final firestore = FirebaseFirestore.instance;
 
   if (await noMayorQueVariable(maxRecomendaciones)) {
       // El número de recomendaciones es aceptable, haz algo aquí
@@ -205,9 +211,63 @@ Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) asyn
   };
   type = typeMap[type]!;
 
-  final firestore = FirebaseFirestore.instance;
+  if(type == "songs"){
+    Map<String, num> numEmocion = {
+      'joy' : 1,
+      'sadness' : 2,
+      'fear' : 3,
+      'angry' : 4,
+    };
+    Map<num, String> emocionNum = {
+      1: 'joy' ,
+      2:'sadness' ,
+      3: 'fear' ,
+      4: 'angry' ,
+    };
+    num? emotionNumber = numEmocion[emotion];
 
-  //if(type=="")
+    final querySnapshot = await firestore
+      .collection(type)
+      .where('emotion', isEqualTo: emotionNumber)
+      .get();
+
+    final documents = querySnapshot.docs;
+    if (documents.isEmpty) {
+      throw Exception("No hay suficientes datos que cumplan con los criterios.");
+      //Aqui colocar que ponga de todos los generos
+    }
+
+    final random = Random();
+    final selectedDocuments = <DocumentSnapshot>[];
+
+    while (selectedDocuments.length < 5) {
+      final randomIndex = random.nextInt(documents.length);
+      final randomDocument = documents[randomIndex];
+
+      if (!selectedDocuments.contains(randomDocument)) {
+        selectedDocuments.add(randomDocument);
+      }
+    }
+
+
+    final data = selectedDocuments.map((doc) {
+      final Map<String, dynamic> docData = doc.data() as Map<String, dynamic>;
+      final genre = [docData['genre'] as int];
+
+      return MovieSerie(
+        tconst: doc.id, // Usamos doc.id para obtener la clave del documento
+        sinopsis: docData['author'] ?? '',
+        emocion: emocionNum[docData['emotion']] ?? '',
+        genres: genre,
+        primaryTitle: docData['title'] ?? '',
+        titleType: 'songs' ?? '',
+      );
+    }).toList();
+
+    print(data);
+    return data; 
+  }
+
 
   // Realiza una consulta a la colección "movies_series" en Firestore
   final querySnapshot = await firestore
@@ -237,8 +297,6 @@ Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) asyn
     }
   }
 
-
-  // Convierte los documentos en objetos MovieSerie
   final data = selectedDocuments.map((doc) {
     final Map<String, dynamic> docData = doc.data() as Map<String, dynamic>;
     return MovieSerie(
