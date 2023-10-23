@@ -1,26 +1,63 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_match/controllers/recommendations.dart';
 import 'package:mood_match/models/SingletonUser.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/user_profile.dart';
 import 'package:mood_match/controllers/emotionClasification.dart';
-class HomeScreen extends StatelessWidget {
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+User? user = _auth.currentUser;
+String? userUid = user?.uid;
+class HomeScreen extends StatefulWidget {
   final User? user = FirebaseAuth.instance.currentUser;
+  String lastRecommendation = "Cargando..."; // Inicializa lastRecommendation
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+
+  // Función para obtener la última recomendación
+  Future<void> bob() async {
+    String recomendacion = await obtenerUltimaRecomendacion(); // Llama a la función para obtener la recomendación
+
+    if (recomendacion.isNotEmpty) {
+      // Si se obtiene una recomendación válida, actualiza el estado
+      setState(() {
+        var widget;
+        widget.lastRecommendation = recomendacion;
+      });
+    } else {
+      // Maneja el caso en el que no se obtiene una recomendación válida
+      setState(() {
+        var widget;
+        widget.lastRecommendation = "No hay recomendaciones disponibles";
+      });
+    }
+  }
+}
+
+void setState(Null Function() param0) {
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Llama a la función para obtener la última recomendación cuando se inicia la pantalla
+    widget.bob();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    String userImageURL = UserSingleton().profileImageUrl ?? 'assets/images/logo.png'; // URL de imagen de usuario o imagen de respaldo
+    String userImageURL = UserSingleton().profileImageUrl ?? 'assets/images/logo.png';
 
     UserProfile currentUser = UserProfile(
       username: UserSingleton().username ?? "Usuario",
-      profileImageURL: userImageURL, // Asigna la URL de la imagen
+      profileImageURL: userImageURL,
       isPremium: true,
       name: 'namesito',
     );
-
-    int numberOfRecommendations = 10;
-    String lastRecommendation = "The Big Bang Theory";
 
     return Scaffold(
       appBar: PreferredSize(
@@ -33,7 +70,7 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 50),
             CircleAvatar(
-              backgroundImage: NetworkImage(userImageURL), // Carga la imagen desde la URL
+              backgroundImage: NetworkImage(userImageURL),
               radius: 50,
             ),
             SizedBox(height: 20),
@@ -59,15 +96,15 @@ class HomeScreen extends StatelessWidget {
                     child: ListTile(
                       title: const Text(
                         'Recomendaciones',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       subtitle: Text(
-                        '$numberOfRecommendations',
-                        style: const TextStyle(
+                        'Cargando...',
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -86,15 +123,15 @@ class HomeScreen extends StatelessWidget {
                     child: ListTile(
                       title: const Text(
                         'Última Recomendación:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       subtitle: Text(
-                        lastRecommendation,
-                        style: const TextStyle(fontSize: 16),
+                        widget.lastRecommendation,
+                        style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -106,7 +143,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/choose_content');
               },
-              child: const Text(
+              child: Text(
                 '¿Comenzamos?',
                 style: TextStyle(fontSize: 18),
               ),

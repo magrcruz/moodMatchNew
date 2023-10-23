@@ -159,6 +159,7 @@ Widget _buildImageCard(String imageUrl) {
         imageUrl: '',
       );
     }*/
+    guardarUltimaRecomendacion(widget.title);//
 
     if (content?.titleType=="songs"){
       return ContentDetails(

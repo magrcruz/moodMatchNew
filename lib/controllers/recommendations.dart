@@ -311,3 +311,47 @@ Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) asyn
 
   return data;
 }
+
+//Ultima recomendacion
+Future<void> guardarUltimaRecomendacion(String? ultimaRecomendacion) async {
+  try {
+    // Acceder a la instancia de Firestore
+    final firestore = FirebaseFirestore.instance;
+
+    // Referencia al documento del usuario en la colección nPreferences
+    final docReference = firestore.collection('nRecommendations').doc(userUid);
+
+    // Actualizar el campo ultimaRecomendacion con el nuevo valor
+    await docReference.update({'ultimaRecomendacion': ultimaRecomendacion});
+
+    print('Última recomendación guardada con éxito.');
+  } catch (error) {
+    print('Error al guardar la última recomendación: $error');
+  }
+}
+
+Future<String> obtenerUltimaRecomendacion() async {
+  try {
+    // Acceder a la instancia de Firestore
+    final firestore = FirebaseFirestore.instance;
+
+    // Obtener la referencia al documento del usuario en la colección nPreferences
+    final docReference = firestore.collection('nPreferences').doc(userUid);
+
+    // Obtener el documento y extraer el valor del campo ultimaRecomendacion
+    final docSnapshot = await docReference.get();
+
+    if (docSnapshot.exists) {
+      final data = docSnapshot.data() as Map<String, dynamic>;
+      final ultimaRecomendacion = data['ultimaRecomendacion'] as String;
+
+      return ultimaRecomendacion;
+    } else {
+      // El documento no existe o no tiene el campo ultimaRecomendacion
+      return '';
+    }
+  } catch (error) {
+    print('Error al obtener la última recomendación: $error');
+    return '';
+  }
+}
