@@ -13,8 +13,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:mood_match/Models/MovieSerie.dart';
-import 'package:mood_match/controllers/genresClasification.dart';
 
+/*
+Modificacion para que trabaje de forma
+Coleccion -> documento -> campo (coleccion) -> documento -> campos
+Historial -> uid -> RecomendacionesPasadas -> datenow -> left, array de recomendaciones
+*/
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 User? user = _auth.currentUser;
@@ -147,44 +151,60 @@ Future<String> check_sentiment(String? inputText) async {
 }*/
 
 //From here
-
+/*
+Modificacion para que trabaje de forma
+Coleccion -> documento -> campo (coleccion) -> documento -> campos
+Historial -> uid -> RecomendacionesPasadas -> datenow -> utilizadas
+                                                      -> recomendaciones(array)
+*/
+num maxRecomendaciones = 5;
 Future<void> incrementarRecomendacionesHoy() async {
   final firestore = FirebaseFirestore.instance;
-  final userDoc = firestore.collection('nRecommendations').doc(userUid);
+  final userDoc = firestore.collection('Historial').doc(userUid);
 
   // Obtener la fecha de hoy en formato YYYY-MM-DD
   DateTime now = DateTime.now();
   String formattedDate = "${now.year}-${now.month}-${now.day}";
 
-  // Incrementar el número de recomendaciones para la fecha de hoy
-  userDoc.collection('numRecomendations').doc(formattedDate).set(
-    {'valor': FieldValue.increment(1)},
-    SetOptions(merge: true),
-  );
+  final recomendacionesPasadasDoc = userDoc.collection('RecomendacionesPasadas').doc(formattedDate);
+
+  // Verificar si el documento de la fecha actual existe
+  final docSnapshot = await recomendacionesPasadasDoc.get();
+
+  if (docSnapshot.exists) {
+    final data = docSnapshot.data() as Map<String, dynamic>;
+    final utilizadas = data['utilizadas'] ?? 0;
+    
+    await recomendacionesPasadasDoc.set(
+      {'utilizadas': utilizadas + 1 },
+      SetOptions(merge: true),
+    );
+  } else {
+    // El documento no existe, créalo con el campo 'utilizadas' y un valor predeterminado 
+    await recomendacionesPasadasDoc.set({'utilizadas': maxRecomendaciones-1});
+  }
 }
-Future<bool> noMayorQueVariable(int maxRecomendaciones) async {
+
+Future<bool> quedanRecomendaciones(num maxRecomendaciones) async {
   final firestore = FirebaseFirestore.instance;
-  final userDoc = firestore.collection('nRecommendations').doc(userUid);
+  final userDoc = firestore.collection('Historial').doc(userUid);
 
   // Obtener la fecha de hoy en formato YYYY-MM-DD
   DateTime now = DateTime.now();
   String formattedDate = "${now.year}-${now.month}-${now.day}";
 
   // Obtener el documento correspondiente a la fecha de hoy
-  final docSnapshot = await userDoc.collection('numRecomendations').doc(formattedDate).get();
+  final docSnapshot = await userDoc.collection('RecomendacionesPasadas').doc(formattedDate).get();
 
   if (docSnapshot.exists) {
     final data = docSnapshot.data() as Map<String, dynamic>;
-    final recomendacionesHoy = data['valor'] ?? 0;
+    final recomendacionesutilizadas = data['utilizadas'] ?? 0;
 
     // Verificar si no es mayor que la variable
-    return recomendacionesHoy < maxRecomendaciones;
+    return recomendacionesutilizadas<maxRecomendaciones;
   }
-
   return true; // Devolver true si el documento no existe
 }
-
-int maxRecomendaciones = 5;
 
 /**
     
@@ -194,7 +214,7 @@ int maxRecomendaciones = 5;
 Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) async {
   final firestore = FirebaseFirestore.instance;
 
-  if (await noMayorQueVariable(maxRecomendaciones)) {
+  if (await quedanRecomendaciones(maxRecomendaciones)) {
       // El número de recomendaciones es aceptable, haz algo aquí
       incrementarRecomendacionesHoy();
       print("Número de recomendaciones aceptable");
@@ -313,13 +333,14 @@ Future<List<MovieSerie>> getRandomMoviesSeries(String type, String emotion) asyn
 }
 
 //Ultima recomendacion
+/*
 Future<void> guardarUltimaRecomendacion(String? ultimaRecomendacion) async {
   try {
     // Acceder a la instancia de Firestore
     final firestore = FirebaseFirestore.instance;
 
     // Referencia al documento del usuario en la colección nPreferences
-    final docReference = firestore.collection('nRecommendations').doc(userUid);
+    final docReference = firestore.collection('Historial').doc(userUid);
 
     // Actualizar el campo ultimaRecomendacion con el nuevo valor
     await docReference.update({'ultimaRecomendacion': ultimaRecomendacion});
@@ -354,4 +375,147 @@ Future<String> obtenerUltimaRecomendacion() async {
     print('Error al obtener la última recomendación: $error');
     return '';
   }
+}
+*/
+//Para guardar los generos
+
+void updateGenresInFirebase(List<String> selectedGenresMovies, String campo) async {
+  final firestore = FirebaseFirestore.instance;
+  final userDocument = firestore.collection('preferences').doc(userUid);
+
+  // Consulta la base de datos para obtener los datos existentes del usuario
+  final userSnapshot = await userDocument.get();
+  if (userSnapshot.exists) {
+    // Convierte los géneros en una lista de enteros utilizando los datos de género proporcionados
+    List selectedGenreIds = selectedGenresMovies.map((genre) {
+      // Busca el género por su nombre y obtén el ID
+      final genreData = genres.firstWhere((genreData) => genreData["name"] == genre, orElse: () => null);
+      return genreData != null ? genreData["id"] : null;
+    }).where((id) => id != null).toList();
+
+    // Actualiza el campo "generos" en Firestore
+    await userDocument.update({
+      "movies-genres": selectedGenreIds,
+    });
+  }
+}
+
+void updateSongsInFirebase(List<String> selectedSongs) async {
+  final firestore = FirebaseFirestore.instance;
+  final userDocument = firestore.collection('preferences').doc(userUid);
+
+  // Consulta la base de datos para obtener los datos existentes del usuario
+  final userSnapshot = await userDocument.get();
+  if (userSnapshot.exists) {
+    // Convierte las canciones en una lista de números utilizando el mapeo inverso
+    List<int?> selectedSongNumbers = selectedSongs
+        .map((song) => invertedGenreMusicMap[song])
+        .where((number) => number != null)
+        .toList();
+
+    // Actualiza el campo "canciones" en Firestore
+    await userDocument.update({
+      "song-genres": selectedSongNumbers,
+    });
+  }
+}
+
+
+Future<void> agregarRecomendacion(String tconst, String name) async {
+  final historialRef = FirebaseFirestore.instance.collection('Historial');
+  final uidRef = historialRef.doc(userUid);
+
+  // Obtén la fecha y hora actual
+  final now = DateTime.now();
+  String formattedDate = "${now.year}-${now.month}-${now.day}";
+
+
+  // Crea un objeto con los datos de la recomendación
+  final recomendacion = {
+    'tconst': tconst,
+    'name': name,
+    'hora': now,
+  };
+
+  try {
+    // Agrega el objeto a la colección "recomendaciones"
+    await uidRef.collection('RecomendacionesPasadas').doc(formattedDate).update({
+      'recomendaciones': FieldValue.arrayUnion([recomendacion]),
+    });
+    print('Recomendación agregada correctamente');
+  } catch (error) {
+    print('Error al agregar la recomendación: $error');
+  }
+}
+
+Future<dynamic> obtenerUltimaRecomendacion() async {
+  final historialRef = FirebaseFirestore.instance.collection('Historial');
+  final uidRef = historialRef.doc(userUid);
+
+  final now = DateTime.now();
+  String formattedDate = "${now.year}-${now.month}-${now.day}";
+
+  try {
+    final docSnapshot = await uidRef.collection('RecomendacionesPasadas').doc(formattedDate).get();
+
+    if (docSnapshot.exists) {
+      final data = docSnapshot.data();
+      final recomendaciones = data?['recomendaciones'];
+
+      if (recomendaciones is List && recomendaciones.isNotEmpty) {
+        // Supongamos que cada mapa en la lista contiene una clave "tconst" y una clave "name"
+        final ultimoElemento = recomendaciones.last;
+        if (ultimoElemento is Map<String, dynamic>) {
+          final tconst = ultimoElemento['tconst'];
+          final name = ultimoElemento['name'];
+
+          if (tconst != null && name != null) {
+            return name;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    print('Error al obtener el último elemento: $error');
+  }
+
+  return "Nada por hoy";
+}
+
+Future<num> obtenerNumeroRecomendacionesRestantes() async {
+  final firestore = FirebaseFirestore.instance;
+  final userDoc = firestore.collection('Historial').doc(userUid);
+
+  // Obtener la fecha de hoy en formato YYYY-MM-DD
+  DateTime now = DateTime.now();
+  String formattedDate = "${now.year}-${now.month}-${now.day}";
+
+  // Obtener el documento correspondiente a la fecha de hoy
+  final docSnapshot = await userDoc.collection('RecomendacionesPasadas').doc(formattedDate).get();
+
+  if (docSnapshot.exists) {
+    final data = docSnapshot.data() as Map<String, dynamic>;
+    final recomendacionesutilizadas = data['utilizadas'] ?? 0;
+
+    // Verificar si no es mayor que la variable
+    return maxRecomendaciones - recomendacionesutilizadas;
+  }
+  return maxRecomendaciones; // Devolver true si el documento no existe
+}
+
+Stream<String> obtenerUltimaRecomendacionStream() {
+  // Crea un controlador de flujo (StreamController) para emitir valores
+  final StreamController<String> controller = StreamController<String>();
+
+  // Llama a obtenerUltimaRecomendacion() para obtener la recomendación
+  obtenerUltimaRecomendacion().then((recomendacion) {
+    // Emite la recomendación al stream
+    controller.add(recomendacion);
+  }).catchError((error) {
+    // Maneja errores y emite un valor vacío o un mensaje de error
+    controller.addError(error.toString());
+  });
+
+  // Devuelve el stream
+  return controller.stream;
 }

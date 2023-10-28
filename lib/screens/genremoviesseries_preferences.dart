@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/widgets/genre_title.dart';
 import 'package:mood_match/main.dart';
-import 'package:mood_match/controllers/genresClasification.dart';
+import 'package:mood_match/controllers/genresClassification.dart';
 class GenremovieseriePreferences extends StatefulWidget {
   @override
   _GenrePreferencesState createState() => _GenrePreferencesState();

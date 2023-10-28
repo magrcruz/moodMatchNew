@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_match/controllers/genresClasification.dart';
+import 'package:mood_match/controllers/genresClassification.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'package:mood_match/models/contentDetails.dart';
@@ -143,6 +143,7 @@ Widget _buildImageCard(String imageUrl) {
 
 
   Future<ContentDetails> fetchContentDetails(MovieSerie? content) async {
+    agregarRecomendacion(content!.tconst, widget.title!);
     /*
     try {
       // Llama a extractContentDetailsFromMovie para obtener los detalles del contenido.
@@ -159,7 +160,7 @@ Widget _buildImageCard(String imageUrl) {
         imageUrl: '',
       );
     }*/
-    guardarUltimaRecomendacion(widget.title);//
+    //guardarUltimaRecomendacion(widget.title);//
 
     if (content?.titleType=="songs"){
       return ContentDetails(
