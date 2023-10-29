@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_match/main.dart';
 import 'package:mood_match/controllers/recommendations.dart';
-import 'package:mood_match/Models/MovieSerie.dart';
+import 'package:mood_match/models/MovieSerie.dart';
 import 'package:mood_match/widgets/Custom_Loader.dart';
 import 'package:mood_match/widgets/custom_app_bar.dart';
 import 'details.dart';
@@ -44,7 +44,7 @@ class _RecommendationResultsState extends State<RecommendationResults> {
     try {
       final recommendations = await getRandomMoviesSeries(widget.type ?? '', widget.selectedEmotion ?? '');
       setState(() {
-        _recommendations = recommendations as List<MovieSerie>;
+        _recommendations = recommendations;
       });
     } catch (error) {
       print('Error loading recommendations: $error');

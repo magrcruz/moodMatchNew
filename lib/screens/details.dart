@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:mood_match/main.dart';
-import 'package:mood_match/Models/MovieSerie.dart';
+import 'package:mood_match/models/MovieSerie.dart';
 
 class Details extends StatefulWidget {
   final MovieSerie content;
@@ -109,6 +109,17 @@ Future<bool> _imageExistsOnline(String imageUrl) async {
 }
 
 Widget _buildImageCard(String imageUrl) {
+  Future<bool> _imageExistsOnline(String url) async {
+    if(url == "https://image.tmdb.org/t/p/w500None")
+      return false;
+    try {
+      final response = await http.head(Uri.parse(url));
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
   return Container(
     height: 200,
     child: ClipRRect(
@@ -117,9 +128,8 @@ Widget _buildImageCard(String imageUrl) {
         future: _imageExistsOnline(imageUrl),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Puedes mostrar un indicador de carga mientras se verifica la existencia de la imagen.
-          } else if (snapshot.hasError || !snapshot.hasData){
-            // Si hay un error, si snapshot.data es nulo o si la imagen no existe en la red, muestra una imagen predeterminada.
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError || !snapshot.hasData) {
             return Image.asset(
               'assets/images/defaultMovie.png',
               fit: BoxFit.cover,
@@ -127,7 +137,6 @@ Widget _buildImageCard(String imageUrl) {
               height: 200,
             );
           } else {
-            // Si la imagen existe en la red, muestra la imagen desde la URL.
             return Image.network(
               imageUrl,
               fit: BoxFit.cover,
@@ -144,23 +153,6 @@ Widget _buildImageCard(String imageUrl) {
 
   Future<ContentDetails> fetchContentDetails(MovieSerie? content) async {
     agregarRecomendacion(content!.tconst, widget.title!);
-    /*
-    try {
-      // Llama a extractContentDetailsFromMovie para obtener los detalles del contenido.
-      //final ContentDetails contentDetails = await extractContentDetailsFromMovie(id);
-      // Realiza cualquier procesamiento adicional si es necesario.
-
-      //return contentDetails;
-    } catch (error) {
-      // Manejar errores aquí
-      return ContentDetails(
-        genre: 'No se consiguio extraer la informacion',
-        synopsisOrArtist: 'No se consiguio extraer la informacion',
-        platforms: ['No se consiguio extraer la informacion'],
-        imageUrl: '',
-      );
-    }*/
-    //guardarUltimaRecomendacion(widget.title);//
 
     if (content?.titleType=="songs"){
       return ContentDetails(
@@ -169,7 +161,7 @@ Widget _buildImageCard(String imageUrl) {
         }).toList().join(', '),
         synopsisOrArtist: content.sinopsis,
         platforms: ['Spotify'],
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/moodmatch-57ae2.appspot.com/o/defaultImages%2FdefaultMovie.png?alt=media&token=09516e2f-7862-4ade-a9f8-3c7339d56f49&_gl=1*487rno*_ga*NTI4NDgxMjk2LjE2OTU1MDI3MjU.*_ga_CW55HF8NVT*MTY5ODAzMzc4NS4xOS4xLjE2OTgwMzQxNzQuMzQuMC4w',
+        imageUrl: content!.imageUrl,
       );
     }
 
@@ -178,8 +170,8 @@ Widget _buildImageCard(String imageUrl) {
           return genreIdToNameMap[genreId] ?? 'Desconocido';
         }).toList().join(', '),
         synopsisOrArtist: content.sinopsis,
-        platforms: ['Netflix'],
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/moodmatch-57ae2.appspot.com/o/defaultImages%2FdefaultMovie.png?alt=media&token=09516e2f-7862-4ade-a9f8-3c7339d56f49&_gl=1*487rno*_ga*NTI4NDgxMjk2LjE2OTU1MDI3MjU.*_ga_CW55HF8NVT*MTY5ODAzMzc4NS4xOS4xLjE2OTgwMzQxNzQuMzQuMC4w',
+        platforms: content!.plataformas,//content.,
+        imageUrl: content!.imageUrl,
       );
   }
 
