@@ -60,7 +60,7 @@ Coleccion -> documento -> campo (coleccion) -> documento -> campos
 Historial -> uid -> RecomendacionesPasadas -> datenow -> utilizadas
                                                       -> recomendaciones(array)
 */
-num maxRecomendaciones = 5;
+num maxRecomendaciones = 20;
 Future<void> incrementarRecomendacionesHoy() async {
   final firestore = FirebaseFirestore.instance;
   final userDoc = firestore.collection('Historial').doc(userUid);
